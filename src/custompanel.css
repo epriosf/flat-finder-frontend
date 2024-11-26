@@ -1,0 +1,210 @@
+/* Custom classes */
+
+.left-3 {
+  left: 3rem !important;
+}
+.h-75 {
+  height: 75vh;
+  max-height: 475px;
+}
+.max-w-1200 {
+  max-width: 1200px;
+}
+
+.bg-login {
+  background-color: rgba(49, 46, 129, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-box-shadow: 3px 3px 63px -4px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: 3px 3px 63px -4px rgba(0, 0, 0, 0.6);
+  box-shadow: 3px 3px 63px -4px rgba(0, 0, 0, 0.6);
+}
+@supports (backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px)) {
+  .bg-login {
+    /* Styles if backdrop-filter is supported */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px); /* For Safari */
+    background-color: rgba(49, 46, 129, 0.3); /* Adjusted for blur */
+    -webkit-box-shadow: 3px 3px 63px -4px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 3px 3px 63px -4px rgba(0, 0, 0, 0.6);
+    box-shadow: 3px 3px 63px -4px rgba(0, 0, 0, 0.6);
+  }
+}
+.bg-login-img {
+  background-image: url(./images/login-bg.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+.text-transparent {
+  color: transparent;
+}
+#header {
+  z-index: 1005;
+}
+
+#yearBuilt input,
+#dateAvailable input {
+  padding-left: 3rem;
+}
+/* Login Register */
+
+.p-tabview .p-tabview-nav,
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link,
+.p-tabview .p-tabview-nav li .p-tabview-nav-link,
+.p-tabview .p-tabview-panels {
+  background-color: transparent;
+}
+.p-tabmenu {
+  overflow: initial;
+  width: 100%;
+}
+
+.p-tabmenu .p-tabmenu-nav {
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}
+
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link,
+.p-tabview .p-tabview-nav .p-tabview-ink-bar {
+  color: var(--primary-50);
+}
+.p-tabmenu .p-tabmenu-nav .p-tabmenu-ink-bar {
+  background-color: transparent !important;
+}
+.p-tabview .p-tabview-nav .p-tabview-ink-bar {
+  background-color: var(--primary-50);
+}
+
+.p-tabview .p-tabview-nav li .p-tabview-nav-link {
+  color: var(--primary-100);
+}
+
+.p-inputtext:enabled:focus {
+  box-shadow:
+    inset 0 0 0 1px var(--primary-300),
+    inset 0 0 0 1px var(--primary-300),
+    inset 0 0 0 1px var(--primary-300),
+    inset 0 0 0 1px var(--primary-300);
+}
+
+.p-tabview .p-tabview-nav {
+  justify-content: center;
+}
+
+.p-password-input,
+.p-icon-field {
+  width: 100%;
+}
+.p-password-input {
+  padding-left: 3rem;
+}
+.pi {
+  z-index: 100;
+}
+
+#loginForm .p-inline-message.p-inline-message-error .p-inline-message-icon,
+#registerForm.p-inline-message.p-inline-message-error .p-inline-message-icon,
+#error-message .p-inline-message-icon,
+.p-inline-message.p-inline-message-error .p-inline-message-icon {
+  color: var(--pink-300);
+}
+
+.p-menuitem-link {
+  color: #fff;
+  background-color: transparent !important;
+  padding: 1rem;
+  text-decoration: none;
+}
+
+.p-highlight {
+  color: #fff;
+  background-color: var(--primary-700) !important;
+  border-radius: 4px;
+  transition: 500ms cubic-bezier(0.35, 0, 0.25, 1);
+}
+
+li.p-tabmenuitem.p-highlight {
+  background-color: transparent !important;
+}
+
+/* Flats */
+.flat-card {
+  position: relative;
+  background-color: var(--primary-50);
+}
+.flat-card .p-card-content {
+  padding: 0;
+}
+
+.flat-card .p-card-footer {
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.flat-card .p-card-header img {
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.chip-yes {
+  background-color: var(--primary-100); /* Green for Yes */
+  border: 1px solid var(--primary-300);
+}
+
+.chip-no {
+  background-color: var(--primary-100); /* Green for Yes */
+  border: 1px solid var(--primary-300);
+  opacity: 0.7;
+}
+
+.p-dialog-header {
+  color: var(--primary-500);
+}
+
+#newFlatForm .p-float-label {
+  width: 100%;
+}
+
+/* New Flat */
+#newFlatImg img {
+  position: fixed;
+  width: 46%;
+  top: 0;
+  left: 0;
+}
+
+.p-fileupload-file-badge.p-badge {
+  display: none !important;
+}
+
+.flat-img-form img {
+  border-radius: 0.375rem;
+}
+
+.filter-input input {
+  width: 100%;
+}
+
+.p-overlaypanel-flipped::before {
+  bottom: 100%;
+  top: auto;
+  transform: rotate(180deg);
+}
+
+.p-overlaypanel-content {
+  max-height: 60vh;
+  overflow: scroll;
+}
+
+.filter-panel {
+  top: 170px;
+}
+.p-inputnumber input {
+  padding-left: 2.5rem !important;
+}
