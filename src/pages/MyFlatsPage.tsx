@@ -1,36 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
-import { deleteFlat, getUserFlats } from '../services/firebase';
-import { Flat } from '../components/Interfaces/FlatInterface';
-import FlatTitle from '../components/Flats/FlatTitle';
+import React, { useState } from 'react';
+//import { useAuth } from '../hooks/useAuth';
 import FlatList from '../components/Flats/FlatList';
+import FlatTitle from '../components/Flats/FlatTitle';
+import { Flat } from '../components/Interfaces/FlatInterface';
 
 const MyFlatsPage: React.FC = () => {
   const [flats, setFlats] = useState<Flat[]>([]);
   const [filteredFlats, setFilteredFlats] = useState<Flat[]>([]); // State for filtered flats
   const [loading, setLoading] = useState<boolean>(true); // Loading state
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
-  useEffect(() => {
-    if (user) {
-      const fetchMyFlats = async () => {
-        try {
-          const data = await getUserFlats(user.email); // Fetch flats created by the user
-          setFlats(data);
-          setFilteredFlats(data); // Initialize filteredFlats with the fetched data
-        } catch (error) {
-          console.error('Error fetching user flats:', error);
-        } finally {
-          setLoading(false); // Stop loading after fetching data
-        }
-      };
-      fetchMyFlats();
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     const fetchMyFlats = async () => {
+  //       try {
+  //         const data = await getUserFlats(user.email); // Fetch flats created by the user
+  //         setFlats(data);
+  //         setFilteredFlats(data); // Initialize filteredFlats with the fetched data
+  //       } catch (error) {
+  //         console.error('Error fetching user flats:', error);
+  //       } finally {
+  setLoading(false); // Stop loading after fetching data
+  //       }
+  //     };
+  //     fetchMyFlats();
+  //   }
+  // }, [user]);
 
   const handleDelete = async (flatId: string) => {
     try {
-      await deleteFlat(flatId); // Delete flat
       setFlats((prevFlats) =>
         prevFlats.filter((flat) => flat.flatId !== flatId),
       ); // Update state after deletion

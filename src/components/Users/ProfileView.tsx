@@ -4,7 +4,7 @@ import { Dialog } from 'primereact/dialog';
 import { useState } from 'react';
 import { User } from '../Interfaces/UserInterface';
 import bgProfile from './../../images/bg-profile.png';
-import UpdateProfile from './UpdateProfile';
+//import UpdateProfile from './UpdateProfile';
 interface ProfileViewProps {
   user: User;
 }
@@ -77,7 +77,7 @@ const ProfileView = ({ user }: ProfileViewProps) => {
         style={{ width: '50vw' }}
         onHide={handleDialogClose}
       >
-        {user ? (
+        {/* {user ? (
           <UpdateProfile
             userUpdate={{ ...user, password: '' }}
             isAdminister={user.isAdmin}
@@ -85,7 +85,7 @@ const ProfileView = ({ user }: ProfileViewProps) => {
           />
         ) : (
           <div>Loading...</div>
-        )}{' '}
+        )}{' '} */}
       </Dialog>
     </>
   );

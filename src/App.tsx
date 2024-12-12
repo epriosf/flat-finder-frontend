@@ -8,7 +8,7 @@ import './custompanel.css';
 import ErrorPage from './pages/ErrorPage';
 import LoginRegister from './pages/LoginRegisterPage';
 import RootLayout from './pages/RootPage';
-import { AuthProvider } from './contexts/authContext';
+//import { AuthProvider } from './contexts/authContext';
 import PrivateRoute from './components/Path/PrivateRoute';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -149,9 +149,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    //   <AuthProvider>
+    <RouterProvider router={router} />
+    //  </AuthProvider>
   );
 }
 

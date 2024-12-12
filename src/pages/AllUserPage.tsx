@@ -1,4 +1,3 @@
-import { collection, getDocs, query, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import FilterByUser from '../components/Commons/FilterBy/FilterByUser';
 import { SortByUser } from '../components/Commons/SortBy/SortByUser';
@@ -7,7 +6,6 @@ import {
   UserRegister,
 } from '../components/Interfaces/UserInterface';
 import UserList from '../components/Users/UserList';
-import { db } from '../config/firebase';
 const AllUserPage = () => {
   const [users, setUsers] = useState<UserRegister[]>([]);
   const [originalUsers, setOriginalUsers] = useState<UserRegister[]>([]);
@@ -16,36 +14,21 @@ const AllUserPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const usersCollection = collection(db, 'users');
-        const usersSnapshot = await getDocs(usersCollection);
-        const usersList = usersSnapshot.docs.map((doc) => {
-          const data = doc.data();
-          return {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-            password: data.password,
-            birthday: data.birthday ? data.birthday.toDate() : null,
-            profile: data.profile,
-            isAdmin: data.isAdmin,
-          } as UserRegister;
-        });
+        const usersList = [
+          {
+            firstName: 'Paul',
+            lastName: 'Rios',
+            email: 'prios@outlook.es',
+            password: '1234',
+            birthday: new Date(),
+            profile: '',
+            isAdmin: false,
+          },
+        ];
         setUsers(usersList);
         setOriginalUsers(usersList);
 
-        // Fetch flats count for each user
-        const flatsCountObj: { [key: string]: number } = {};
-        for (const user of usersList) {
-          const flatsQuery = query(
-            collection(db, 'flats'),
-            where('flatUser', '==', user.email),
-          );
-          const flatsSnapshot = await getDocs(flatsQuery);
-          flatsCountObj[user.email] = flatsSnapshot.size;
-        }
-
-        // Set the state for flats count
-        setFlatsCount(flatsCountObj);
+        setFlatsCount({ someKey: 0 });
       } catch (error) {
         console.error('Error fetching users:', error);
       }

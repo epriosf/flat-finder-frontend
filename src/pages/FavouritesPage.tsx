@@ -1,54 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
 import FlatList from '../components/Flats/FlatList';
-import { useAuth } from '../hooks/useAuth';
-import { db } from '../config/firebase';
-import { Flat } from '../components/Interfaces/FlatInterface';
+//import { useAuth } from '../hooks/useAuth';
+//import { db } from '../config/firebase';
 import FlatTitle from '../components/Flats/FlatTitle';
+import { Flat } from '../components/Interfaces/FlatInterface';
 
 const FavouritesPage: React.FC = () => {
-  const { user: loggedUser } = useAuth();
+  const loggedUser = null;
+  // const { user: loggedUser } = useAuth();
   const [favoriteFlats, setFavoriteFlats] = useState<Flat[]>([]);
   const [filteredFlats, setFilteredFlats] = useState<Flat[]>([]); // Track filtered flats
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchFavoriteFlats = async () => {
-      if (loggedUser) {
-        try {
-          const usersRef = collection(db, 'users');
-          const q = query(usersRef, where('email', '==', loggedUser.email));
-          const querySnapshot = await getDocs(q);
+      // if (loggedUser) {
+      //   try {
+      //     const usersRef = collection(db, 'users');
+      //     const q = query(usersRef, where('email', '==', loggedUser.email));
+      //     const querySnapshot = await getDocs(q);
 
-          if (!querySnapshot.empty) {
-            const userDoc = querySnapshot.docs[0];
-            const userData = userDoc.data();
+      //     if (!querySnapshot.empty) {
+      //       const userDoc = querySnapshot.docs[0];
+      //       const userData = userDoc.data();
 
-            if (userData.favoriteFlats && userData.favoriteFlats.length > 0) {
-              const flatsRef = collection(db, 'flats');
-              const flatsQuery = query(
-                flatsRef,
-                where('flatId', 'in', userData.favoriteFlats),
-              );
-              const flatsSnapshot = await getDocs(flatsQuery);
+      //       if (userData.favoriteFlats && userData.favoriteFlats.length > 0) {
+      //         const flatsRef = collection(db, 'flats');
+      //         const flatsQuery = query(
+      //           flatsRef,
+      //           where('flatId', 'in', userData.favoriteFlats),
+      //         );
+      //         const flatsSnapshot = await getDocs(flatsQuery);
 
-              const flats: Flat[] = flatsSnapshot.docs.map((doc) => {
-                return {
-                  ...doc.data(),
-                  flatId: doc.id,
-                } as Flat;
-              });
+      //         const flats: Flat[] = flatsSnapshot.docs.map((doc) => {
+      //           return {
+      //             ...doc.data(),
+      //             flatId: doc.id,
+      //           } as Flat;
+      //         });
 
-              setFavoriteFlats(flats);
-              setFilteredFlats(flats); // Initialize filteredFlats with the favorite flats
-            }
-          }
-        } catch (error) {
-          console.error('Error fetching favorite flats:', error);
-        } finally {
-          setLoading(false);
-        }
-      }
+      //         setFavoriteFlats(flats);
+      //         setFilteredFlats(flats); // Initialize filteredFlats with the favorite flats
+      //       }
+      //     }
+      //   } catch (error) {
+      //     console.error('Error fetching favorite flats:', error);
+      //   } finally {
+      setLoading(false);
+      //   }
+      // }
     };
 
     fetchFavoriteFlats();
