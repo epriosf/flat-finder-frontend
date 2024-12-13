@@ -6,8 +6,7 @@ import { Flat } from '../components/Interfaces/FlatInterface';
 import { User } from '../components/Interfaces/UserInterface'; // Use your custom User interface
 import MessageForm from '../components/Messages/MessageForm';
 import MessageList from '../components/Messages/MessageList';
-import { useAuth } from '../hooks/useAuth';
-import { getUserByEmail } from '../services/firebase';
+//import { useAuth } from '../hooks/useAuth';
 import FlatImg from './../images/apt-21.jpg';
 import BathroomIcon from './../images/bathroomIcon.svg';
 import RoomIcon from './../images/roomIcon.svg';
@@ -19,28 +18,40 @@ interface FlatDetailsPageProps {
 const FlatDetailsPage: React.FC<FlatDetailsPageProps> = ({ flat }) => {
   const [userF, setUserF] = useState<User | null>(null);
   const [loadingF, setLoadingF] = useState(true);
-  const { user, loading } = useAuth(); // Assume `useAuth` provides `isLoading`
+  //const isLoading = false;
+  const user: User = {
+    firstName: 'paul',
+    lastName: 'rios',
+    profile: 'string',
+    email: 'prios@outlook.es',
+    birthday: new Date(),
+    role: 'admin',
+    id: 'string',
+    profileImage: 'string',
+    isAdmin: true,
+  };
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate('/login');
-    }
-  }, [user, loading, navigate]);
+  // useEffect(() => {
+  //   if (!loading && !user) {
+  navigate('/login');
+  //   }
+  // }, [user, loading, navigate]);
 
-  if (loading) {
-    return (
-      <div>
-        <i className="pi pi-spin pi-spinner"></i> Loading...
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div>
+  //       <i className="pi pi-spin pi-spinner"></i> Loading...
+  //     </div>
+  //   );
+  // }
 
   // Fetch the user data related to the flat
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const fetchedUser = await getUserByEmail(flat.flatUser);
+        const fetchedUser: User[] = [];
         setUserF(fetchedUser.length > 0 ? fetchedUser[0] : null); // Use your custom User type here
       } catch (error) {
         console.error('Failed to fetch user:', error);

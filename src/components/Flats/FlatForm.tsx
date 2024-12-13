@@ -9,15 +9,15 @@ import { Image } from 'primereact/image';
 import { InputIcon } from 'primereact/inputicon';
 import { InputSwitch, InputSwitchChangeEvent } from 'primereact/inputswitch';
 import { Message } from 'primereact/message';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import { useAuth } from '../../hooks/useAuth';
-import {
-  createFlat,
-  uploadFlatImage,
-  updateFlat,
-} from '../../services/firebase';
+//import { useAuth } from '../../hooks/useAuth';
+//import {
+//  createFlat,
+//  uploadFlatImage,
+//  updateFlat,
+//} from '../../services/firebase';
 import GeneralInput from '../Commons/Inputs/GeneralInput';
 import FormErrorMessage from '../Commons/Inputs/MessageErrors';
 import { Flat } from '../Interfaces/FlatInterface';
@@ -67,15 +67,18 @@ const FlatForm: React.FC<FlatFormProps> = ({
   isEditing = false,
   onFormSubmit,
 }) => {
-  const [flatFile, setFlatFile] = useState<File | null>(null);
+  //const [flatFile, setFlatFile] = useState<File | null>(null);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  //const { user } = defaultUser;
 
-  useEffect(() => {
-    if (!user) {
-      navigate('/');
-    }
-  }, [user, navigate]);
+  useEffect(
+    () => {
+      // if (!user) {
+      //   navigate('/');
+      // }
+    },
+    // [user, navigate]
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -97,38 +100,41 @@ const FlatForm: React.FC<FlatFormProps> = ({
     },
     validationSchema: FlatSchema,
     onSubmit: async (values, { resetForm }) => {
-      if (!user?.email) {
-        // Handle the error appropriately, such as displaying a message to the user
-        console.error('User is not logged in or email is not available.');
-        return;
-      }
-      let imageUrl = initialFlat?.flatImage || '';
+      // if (!user?.email) {
+      // Handle the error appropriately, such as displaying a message to the user
+      console.error(
+        'User is not logged in or email is not available.',
+        JSON.stringify(values),
+      );
+      //  return;
+      // }
+      //let imageUrl = initialFlat?.flatImage || '';
 
       try {
-        if (flatFile) {
-          imageUrl = await uploadFlatImage(flatFile);
-        }
+        // if (flatFile) {
+        //   imageUrl = await uploadFlatImage(flatFile);
+        // }
 
-        const flatData: Omit<Flat, 'flatId'> = {
-          city: values.city,
-          areaSize: values.areaSize,
-          dateAvailable: values.dateAvailable
-            ? values.dateAvailable
-            : Timestamp.now(),
-          hasAc: values.hasAc,
-          price: values.price,
-          streetName: values.streetName,
-          streetNumber: values.streetNumber,
-          yearBuilt: values.yearBuilt,
-          rooms: values.rooms,
-          bathrooms: values.bathrooms,
-          flatUser: user.email || '', // Set the flatUser to the logged-in user's email
-          flatImage: imageUrl,
-        };
+        // const flatData: Omit<Flat, 'flatId'> = {
+        //   city: values.city,
+        //   areaSize: values.areaSize,
+        //   dateAvailable: values.dateAvailable
+        //     ? values.dateAvailable
+        //     : Timestamp.now(),
+        //   hasAc: values.hasAc,
+        //   price: values.price,
+        //   streetName: values.streetName,
+        //   streetNumber: values.streetNumber,
+        //   yearBuilt: values.yearBuilt,
+        //   rooms: values.rooms,
+        //   bathrooms: values.bathrooms,
+        //   flatUser: user.email || '', // Set the flatUser to the logged-in user's email
+        //   flatImage: imageUrl,
+        // };
 
         if (isEditing && initialFlat?.flatId) {
           try {
-            await updateFlat({ ...flatData, flatId: initialFlat.flatId });
+            //  await updateFlat({ ...flatData, flatId: initialFlat.flatId });
             if (onFormSubmit) {
               onFormSubmit(); // Close the dialog if the function is provided
               window.location.reload(); // Refresh the page when the dialog closes
@@ -139,8 +145,8 @@ const FlatForm: React.FC<FlatFormProps> = ({
           }
         } else {
           try {
-            const flatId = await createFlat(flatData);
-            console.log('Flat created successfully with ID:', flatId);
+            //  const flatId = await createFlat(flatData);
+            //console.log('Flat created successfully with ID:', flatId);
             console.log('Navigating to home...');
             navigate('/home');
           } catch (error) {
@@ -149,7 +155,7 @@ const FlatForm: React.FC<FlatFormProps> = ({
         }
 
         resetForm();
-        setFlatFile(null);
+        //  setFlatFile(null);
       } catch (error) {
         console.error('Error creating flat:', error);
       }
@@ -157,8 +163,9 @@ const FlatForm: React.FC<FlatFormProps> = ({
   });
 
   const handleUploadImage = async (e: FileUploadHandlerEvent) => {
-    const file = e.files[0];
-    setFlatFile(file);
+    console.log(e);
+    //  const file = e.files[0];
+    //  setFlatFile(file);
   };
 
   const handleDateChange = (

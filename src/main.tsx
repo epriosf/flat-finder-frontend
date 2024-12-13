@@ -7,12 +7,12 @@ import 'primereact/resources/themes/md-light-indigo/theme.css'; //Theme
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
-import { AuthProvider } from './contexts/authContext.tsx';
+//import { AuthProvider } from './contexts/authContext.tsx';
 TimeAgo.addDefaultLocale(en);
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    {/* <AuthProvider> */}
+    <App />
+    {/* </AuthProvider> */}
   </StrictMode>,
 );

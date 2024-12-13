@@ -1,9 +1,9 @@
+import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
+import { useState } from 'react';
 import FlatList from '../components/Flats/FlatList';
 import FlatTitle from '../components/Flats/FlatTitle';
-import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
 import { Flat } from '../components/Interfaces/FlatInterface';
-import { useEffect, useState } from 'react';
-import { getFlats } from '../services/firebase';
+//import { getFlats } from '../services/firebase';
 
 const HomePage = () => {
   const [flats, setFlats] = useState<Flat[]>([]);
@@ -11,14 +11,15 @@ const HomePage = () => {
   const [first, setFirst] = useState<number>(0);
   const [rows, setRows] = useState<number>(9);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getFlats();
-      setFlats(data as Flat[]);
-      setFilteredFlats(data as Flat[]); // Initialize with full data set
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const data = await getFlats();
+  //     setFlats(data as Flat[]);
+  //     setFilteredFlats(data as Flat[]); // Initialize with full data set
+  //   };
+  //   fetchData();
+  // }, []);
+  setFlats([]);
 
   // Update the flats list after pagination change
   const onPageChange = (event: PaginatorPageChangeEvent) => {

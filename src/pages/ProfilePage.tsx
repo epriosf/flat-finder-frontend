@@ -1,26 +1,23 @@
 import { Image } from 'primereact/image';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import ProfileView from '../components/Users/ProfileView';
-import { useAuth } from '../hooks/useAuth';
+//import { useAuth } from '../hooks/useAuth';
 import NewFlatImg from './../images/new-flat-img.png';
 const Profilepage = () => {
-  const { user, loading } = useAuth(); // Assume `useAuth` provides `isLoading`
-  const navigate = useNavigate();
+  ///const { user, loading } = useAuth(); // Assume `useAuth` provides `isLoading`
+  //const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate('/login');
-    }
-  }, [user, loading, navigate]);
+  // useEffect(() => {
+  //   if (!loading && !user) {
+  //     navigate('/login');
+  //   }
+  // }, [user, loading, navigate]);
 
-  if (loading) {
-    return (
-      <div>
-        <i className="pi pi-spin pi-spinner"></i> Loading...
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div>
+  //       <i className="pi pi-spin pi-spinner"></i> Loading...
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
@@ -35,7 +32,7 @@ const Profilepage = () => {
         </div>
         <div className="w-full md:w-6">
           <h1 className="font-normal">User Profile</h1>
-          <ProfileView user={user!} />
+          {/* <ProfileView user={user!} /> */}
         </div>
       </div>
     </>

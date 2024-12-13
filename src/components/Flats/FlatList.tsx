@@ -1,11 +1,11 @@
 // components/Flats/FlatList.tsx
 // import { useEffect, useState } from 'react';
 // import { getFlats } from '../../services/firebase';
-import FlatItem from './FlatItem';
 import { Flat } from '../Interfaces/FlatInterface'; // Updated import
+import FlatItem from './FlatItem';
 // import { confirmDialog } from 'primereact/confirmdialog';
 import { useState } from 'react';
-import { deleteFlat } from '../../services/firebase';
+//import { deleteFlat } from '../../services/firebase';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 
 interface FlatListProps {
@@ -28,7 +28,7 @@ const FlatList: React.FC<FlatListProps> = ({
       acceptClassName: 'p-button-danger',
       accept: async () => {
         try {
-          await deleteFlat(flatId);
+          // await deleteFlat(flatId);
           if (onFlatDeleted) {
             onFlatDeleted(flatId); // Optionally trigger any additional actions after deletion
           }

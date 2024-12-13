@@ -12,11 +12,6 @@ import * as Yup from 'yup';
 import GeneralInput from '../components/Commons/Inputs/GeneralInput';
 import PasswordInput from '../components/Commons/Inputs/PasswordInput';
 import { UserRegister } from '../components/Interfaces/UserInterface';
-import {
-  registerUserWithAuth,
-  registerUserWithFirestore,
-  uploadProfileImage,
-} from '../services/firebase';
 
 //Min and Max Dates
 const today = new Date();
@@ -77,7 +72,7 @@ const RegisterPage = () => {
 
       try {
         if (profileFile) {
-          imageUrl = await uploadProfileImage(profileFile);
+          imageUrl = '';
         }
         const user: UserRegister = {
           firstName: values.firstName,
@@ -91,20 +86,7 @@ const RegisterPage = () => {
           isAdmin: false,
         };
 
-        const userCredential = await registerUserWithAuth(
-          user.email,
-          user.password,
-        );
-        await registerUserWithFirestore(userCredential.uid, {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          password: user.password,
-          birthday: user.birthday,
-          profile: user.profile,
-          isAdmin: user.isAdmin,
-        });
-        // console.log('User Register Succesfully');
+        console.log('User Register Succesfully', user);
         toastCenter.current?.show({
           severity: 'success',
           summary: 'Success',
