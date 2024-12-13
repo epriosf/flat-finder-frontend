@@ -4,7 +4,7 @@ import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Message } from 'primereact/message';
 import * as Yup from 'yup';
-import { createMessage } from '../../services/firebase';
+//import { createMessage } from '../../services/firebase';
 import { NewMessage } from '../Interfaces/MessageInterface';
 
 interface MessageFormProps {
@@ -34,9 +34,9 @@ const MessageForm: React.FC<MessageFormProps> = ({ flatId, userEmail }) => {
         content: values.content,
         createdAt: Timestamp.fromDate(new Date()),
       };
-      const messageId = await createMessage(newMessage);
+      // const messageId = await createMessage(newMessage);
       // Handle form submission
-      console.log('Form values:', messageId);
+      console.log('Form values:', newMessage);
       window.location.reload();
     },
   });
