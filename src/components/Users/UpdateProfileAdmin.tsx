@@ -246,7 +246,11 @@
 //   );
 // };
 const UpdateProfile = () => {
-  return console.log('UpdateProfile');
+  return (
+    <>
+      <div> UpdateProfile Admin</div>
+    </>
+  );
 };
 
 export default UpdateProfile;

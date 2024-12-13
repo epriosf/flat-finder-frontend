@@ -116,11 +116,12 @@ const UserCard: React.FC<UserCardProps> = ({
         onHide={handleDialogClose}
       >
         {user ? (
-          <UpdateProfileAdmin
-            userUpdate={user}
-            isAdminister={user.isAdmin}
-            onClose={handleDialogClose}
-          />
+          // <UpdateProfileAdmin
+          //   userUpdate={user}
+          //   isAdminister={user.isAdmin}
+          //   onClose={handleDialogClose}
+          // />
+          <UpdateProfileAdmin />
         ) : (
           <div>Loading...</div>
         )}{' '}

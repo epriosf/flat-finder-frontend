@@ -68,7 +68,8 @@ const AllUserPage = () => {
         </div>
       </div>
 
-      <UserList users={users} flatsCount={flatsCount} />
+      {/* <UserList users={users} flatsCount={flatsCount} /> */}
+      <UserList />
     </>
   );
 };

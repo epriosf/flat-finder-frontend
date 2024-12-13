@@ -150,14 +150,18 @@
 // };
 
 // // Helper function to calculate age from birthday
-// export const calculateAge = (birthday: Date | null): number => {
-//   if (!birthday) return 0;
-//   const diff = Date.now() - birthday.getTime();
-//   const ageDate = new Date(diff);
-//   return Math.abs(ageDate.getUTCFullYear() - 1970);
-// };
+export const calculateAge = (birthday: Date | null): number => {
+  if (!birthday) return 0;
+  const diff = Date.now() - birthday.getTime();
+  const ageDate = new Date(diff);
+  return Math.abs(ageDate.getUTCFullYear() - 1970);
+};
 
 const UserList = () => {
-  console.log('UserList tsx');
+  return (
+    <>
+      <div>UserList</div>
+    </>
+  );
 };
 export default UserList;
