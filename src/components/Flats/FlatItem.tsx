@@ -4,21 +4,17 @@ import { Chip } from 'primereact/chip';
 // import { Image } from 'primereact/image';
 import { useEffect, useState } from 'react';
 //import { getUserByEmail, toggleFavoriteFlat } from '../../services/firebase';
-import {
-  // collection,
-  //getDocs,
-  //query,
-  Timestamp,
-} from 'firebase/firestore';
+import { format } from 'date-fns';
 import { Avatar } from 'primereact/avatar';
 import { Dialog } from 'primereact/dialog';
 import EditFlatPage from '../../pages/EditFlatPage';
 import { Flat } from '../Interfaces/FlatInterface'; // Updated import
 import FlatImg from './../../images/apt-21.jpg';
+import UserImg from './../../images/profile.png';
 //import { db } from '../../config/firebase';
 //import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import FlatDetailsPage from '../../pages/FlatDetailsPage';
-
 interface FlatItemProps {
   flat: Flat;
   activeDialog: string | null;
@@ -34,68 +30,61 @@ const FlatItem: React.FC<FlatItemProps> = ({
   onDeleteRequest,
   onFavoriteToggle,
 }) => {
-  // const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  //const [user, setUser] = useState<User | null>(null);
+  //const [loading, setLoading] = useState<boolean>(true);
   const [viewDialogVisible, setViewDialogVisible] = useState(false);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
-  // const [fullFlat, setFullFlat] = useState<Flat | null>(null);
-  //const { user: loggedUser } = null; //useAuth();
+  const { user: loggedUser } = useAuth();
   const [isFavorite, setIsFavorite] = useState(false);
+  const initialDate = flat.dateAvailable ? flat.dateAvailable[0] : null;
+  const endDate =
+    flat.dateAvailable && flat.dateAvailable.length > 1
+      ? flat.dateAvailable[flat.dateAvailable.length - 1]
+      : null;
+
+  // Format the dates if they are valid
+  const formattedInitialDate = initialDate
+    ? format(new Date(initialDate), 'MMMM dd, yyyy')
+    : 'N/A';
+  const formattedEndDate = endDate
+    ? format(new Date(endDate), 'MMMM dd, yyyy')
+    : 'N/A';
 
   // Fetch the user data related to the flat
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        //     const fetchedUser = await getUserByEmail(flat.flatUser);
-        //const fetchedUser = null;
-        // setUser(fetchedUser.length > 0 ? fetchedUser[0] : null);
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUser();
-  }, [flat.flatUser]);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const fetchedUser = await getUserById(flat.ownerId);
+  //       setUser(fetchedUser.length > 0 ? fetchedUser[0] : null);
+  //     } catch (error) {
+  //       console.error('Failed to fetch user:', error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, [flat.ownerId]);
 
   // Check if the flat is already in the user's favorites
-  useEffect(
-    () => {
-      const checkIfFavorite = async () => {
-        //   if (loggedUser) {
-        // const usersRef = collection(db, 'users');
-        //const q = query(usersRef, where('email', '==', loggedUser.email));
-        //const querySnapshot = await getDocs(q);
-        // if (!querySnapshot.empty) {
-        //   const userDoc = querySnapshot.docs[0];
-        //   const userData = userDoc.data();
-        //   setIsFavorite(userData.favoriteFlats?.includes(flat.flatId));
-        // }
-        //   }
-      };
-      checkIfFavorite();
-    },
-    // [loggedUser, flat.flatId]);
-    [flat.flatId],
-  );
-
-  const formatDate = (date: Timestamp | Date): string => {
-    const dateObj = date instanceof Timestamp ? date.toDate() : date;
-    const formatter = new Intl.DateTimeFormat('en-GB', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-    return formatter.format(dateObj);
-  };
-
-  const formattedDate = flat.dateAvailable
-    ? formatDate(flat.dateAvailable)
-    : 'N/A';
+  useEffect(() => {
+    const checkIfFavorite = async () => {
+      //   if (loggedUser) {
+      // const usersRef = collection(db, 'users');
+      //const q = query(usersRef, where('email', '==', loggedUser.email));
+      //const querySnapshot = await getDocs(q);
+      // if (!querySnapshot.empty) {
+      //   const userDoc = querySnapshot.docs[0];
+      //   const userData = userDoc.data();
+      //   setIsFavorite(userData.favoriteFlats?.includes(flat.flatId));
+      // }
+      //   }
+    };
+    checkIfFavorite();
+  }, [loggedUser, flat._id]);
 
   const handleCardClick = () => {
     setViewDialogVisible(true);
-    setActiveDialog(flat.flatId);
+    setActiveDialog(flat._id);
   };
 
   const handleViewDialogClose = () => {
@@ -106,7 +95,7 @@ const FlatItem: React.FC<FlatItemProps> = ({
   const handleEditClick = (event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent card click from triggering
     setEditDialogVisible(true);
-    setActiveDialog(flat.flatId);
+    setActiveDialog(flat._id);
   };
 
   const handleEditDialogClose = () => {
@@ -116,7 +105,7 @@ const FlatItem: React.FC<FlatItemProps> = ({
 
   const handleDeleteClick = (event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent card click from triggering
-    onDeleteRequest(flat.flatId);
+    onDeleteRequest(flat._id);
   };
 
   const handleFavoriteClick = async (event: React.MouseEvent) => {
@@ -126,7 +115,7 @@ const FlatItem: React.FC<FlatItemProps> = ({
       // await toggleFavoriteFlat(loggedUser.email, flat.flatId, isFavorite);
       setIsFavorite(!isFavorite);
       if (onFavoriteToggle) {
-        onFavoriteToggle(flat.flatId, !isFavorite);
+        onFavoriteToggle(flat._id, !isFavorite);
       }
     } catch (error) {
       console.error('Error toggling favorite:', error);
@@ -136,52 +125,49 @@ const FlatItem: React.FC<FlatItemProps> = ({
     // }
   };
 
-  if (loading) {
-    return (
-      <div>
-        <i className="pi pi-spin pi-spinner"></i> Loading...
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div>
+  //       <i className="pi pi-spin pi-spinner"></i> Loading...
+  //     </div>
+  //   );
+  // }
 
   // if (!user) {
-  //  return <div>User not found</div>;
+  //   return <div>User not found</div>;
   // }
 
   // Header and footer for Card component
   const headerCard = (
-    <img
-      alt={`${flat.streetNumber} ${flat.streetName}`}
-      src={flat.flatImage || FlatImg}
-    />
+    <img alt={`${flat.streetNumber} ${flat.streetName}`} src={FlatImg} />
   );
 
   const footerCard = (
     <div className="flex gap-2">
-      {/* {loggedUser && loggedUser.email === flat.flatUser && ( */}
-      <Button
-        icon="pi pi-trash"
-        className="bg-primary-100"
-        size="small"
-        rounded
-        text
-        raised
-        aria-label="Delete"
-        onClick={handleDeleteClick}
-      />
-      {/* )} */}
-      {/* {loggedUser && loggedUser.email === flat.flatUser && ( */}
-      <Button
-        icon="pi pi-pencil"
-        className="bg-primary-100"
-        size="small"
-        rounded
-        text
-        raised
-        aria-label="Edit"
-        onClick={handleEditClick}
-      />
-      {/* )} */}
+      {loggedUser && loggedUser._id === flat.ownerId && (
+        <Button
+          icon="pi pi-trash"
+          className="bg-primary-100"
+          size="small"
+          rounded
+          text
+          raised
+          aria-label="Delete"
+          onClick={handleDeleteClick}
+        />
+      )}
+      {loggedUser && loggedUser._id === flat.ownerId && (
+        <Button
+          icon="pi pi-pencil"
+          className="bg-primary-100"
+          size="small"
+          rounded
+          text
+          raised
+          aria-label="Edit"
+          onClick={handleEditClick}
+        />
+      )}
       <Button
         icon={isFavorite ? 'pi pi-heart-fill' : 'pi pi-heart'}
         className="bg-primary-100"
@@ -195,19 +181,6 @@ const FlatItem: React.FC<FlatItemProps> = ({
     </div>
   );
 
-  // Header and footer for flat details dialog
-  // const headerDetails = (
-  //   <div>
-  //     <img
-  //       alt={`${flat.streetNumber} ${flat.streetName}`}
-  //       src={flat.flatImage || FlatImg}
-  //       style={{ maxWidth: '97%' }}
-  //     />
-  //     <h2>
-  //       {flat.streetNumber} {flat.streetName}
-  //     </h2>
-  //   </div>
-  // );
   return (
     <>
       <Card
@@ -220,8 +193,7 @@ const FlatItem: React.FC<FlatItemProps> = ({
         style={{ cursor: 'pointer' }}
       >
         <div className="flex flex-column gap-1 mb-3 pt-2">
-          <p className="text-lg font-bold p-0 m-0">Price: ${flat.price}</p>
-          {/* <p className="p-0 m-0 text-600">Built on {flat.yearBuilt}</p> */}
+          <p className="text-lg font-bold p-0 m-0">Price: ${flat.rentPrice}</p>
           <p className="p-0 m-0 text-600">
             Built on {flat.yearBuilt ? flat.yearBuilt : 'N/A'}
           </p>
@@ -233,38 +205,42 @@ const FlatItem: React.FC<FlatItemProps> = ({
           </div>
         </div>
         <p className="p-0 m-0 text-600">
-          Available on: <span className="font-bold">{formattedDate}</span>
+          Available from:
+          <span className="font-bold"> {formattedInitialDate}</span>
+        </p>
+        <p className="p-0 m-0 text-600">
+          Available to:
+          <span className="font-bold"> {formattedEndDate}</span>
         </p>
         <Chip
           className={`text-indigo-500 mt-2 ${flat.hasAc ? 'chip-yes' : 'chip-no'}`}
           label={flat.hasAc ? 'Has AC' : 'No AC'}
           icon="pi pi-asterisk"
         />
-        {/* <p className="p-0 m-0 text-600">Has AC: {flat.hasAc ? 'Yes' : 'No'}</p> */}
 
-        {/* {user && ( */}
-        <div className="mt-4 flex gap-2 align-items-center">
-          <Avatar
-            // image={user.profile}
-            imageAlt="{user.firstName} {user.lastName}"
-            className="mr-2"
-            size="large"
-            shape="circle"
-          />
-          <div>
-            <p className="text-600 m-0">
-              Listed by
-              {/* {user.firstName} {user.lastName} */}
-            </p>
-            {/* <p className="text-600 m-0">{user.email}</p> */}
+        {flat.ownerId && (
+          <div className="mt-4 flex gap-2 align-items-center">
+            <Avatar
+              image={UserImg}
+              imageAlt="{user.firstName} {user.lastName}"
+              className="mr-2"
+              size="large"
+              shape="circle"
+            />
+            <div>
+              <p className="text-600 m-0">
+                Listed by
+                <br />
+                {flat.ownerId.firstName} {flat.ownerId.lastName}
+              </p>
+              {/* <p className="text-600 m-0">{user.email}</p> */}
+            </div>
           </div>
-        </div>
-        {/* )} */}
+        )}
       </Card>
       {/* Flat Details Dialog */}
       <Dialog
-        // header={headerDetails}
-        visible={activeDialog === flat.flatId && viewDialogVisible}
+        visible={activeDialog === flat._id && viewDialogVisible}
         className="w-full md:w-9 lg:w-6"
         onHide={handleViewDialogClose}
       >
@@ -274,7 +250,7 @@ const FlatItem: React.FC<FlatItemProps> = ({
       {/* Edit Flat Dialog */}
       <Dialog
         header="Edit Flat"
-        visible={activeDialog === flat.flatId && editDialogVisible}
+        visible={activeDialog === flat._id && editDialogVisible}
         className="w-full md:w-9 lg:w-6"
         onHide={handleEditDialogClose}
       >

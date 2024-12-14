@@ -1,18 +1,18 @@
 import { Ripple } from 'primereact/ripple';
 import { NavLink, useNavigate } from 'react-router-dom';
-//import { useAuth } from '../../../hooks/useAuth';
-//import { logoutUser } from '../../../services/authService';
+import { useAuth } from '../../../hooks/useAuth';
+import { logoutUser } from '../../../services/authService';
 interface MainNavigationProps {
   // visible: boolean;
   setVisible: (visible: boolean) => void;
 }
 
 const MainNavigation = ({ setVisible }: MainNavigationProps) => {
-  //  const { user } = ; //useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    //logoutUser();
+    logoutUser();
     setVisible(false);
     navigate('/login');
   };
@@ -78,7 +78,7 @@ const MainNavigation = ({ setVisible }: MainNavigationProps) => {
               <Ripple />
             </div>
           </li>
-          {/* {user && user.isAdmin === true && (
+          {user && user.isAdmin === true && (
             <li>
               <div className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
                 <i className="pi pi-user mr-2"></i>
@@ -92,7 +92,7 @@ const MainNavigation = ({ setVisible }: MainNavigationProps) => {
                 <Ripple />
               </div>
             </li>
-          )} */}
+          )}
           <li>
             <button
               type="button"

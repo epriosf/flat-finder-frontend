@@ -1,7 +1,7 @@
-import { Flat } from '../Interfaces/FlatInterface';
+import { useEffect, useState } from 'react';
 import FilterByFlats from '../Commons/FilterBy/FilterByFlat';
 import { SortByFlats } from '../Commons/SortBy/SortByFlat';
-import { useEffect, useState } from 'react';
+import { Flat } from '../Interfaces/FlatInterface';
 
 interface FlatTitleProps {
   title: string;
@@ -39,7 +39,7 @@ const FlatTitle: React.FC<FlatTitleProps> = ({
   }, [originalFlats]);
 
   // Sorting keys and labels
-  const sortKeys: Array<keyof Flat> = ['city', 'price', 'areaSize'];
+  const sortKeys: Array<keyof Flat> = ['city', 'rentPrice', 'areaSize'];
   const sortLabels = ['City', 'Price', 'Area Size'];
 
   return (

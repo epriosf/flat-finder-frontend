@@ -1,13 +1,15 @@
+import { Flat } from './FlatInterface';
 export interface User {
+  _id: string;
+  email: string;
   firstName: string;
   lastName: string;
   profile: string;
-  email: string;
   birthday: Date;
   role: string;
-  id: string;
   profileImage: string;
   isAdmin: boolean;
+  favouriteFlats: Flat[];
 }
 export interface UserOrderBy {
   email: string;

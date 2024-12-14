@@ -4,7 +4,7 @@ import { Message } from 'primereact/message';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-//import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import GeneralInput from '../Commons/Inputs/GeneralInput';
 import PasswordInput from '../Commons/Inputs/PasswordInput';
 
@@ -19,7 +19,7 @@ export interface UserLogin {
 }
 const LoginForm = () => {
   const navigate = useNavigate();
-  //const { login } = useAuth();
+  const { login } = useAuth();
   const [loginError, setLoginError] = useState<boolean>(false);
 
   const formik = useFormik({
@@ -31,7 +31,7 @@ const LoginForm = () => {
     onSubmit: async (values) => {
       console.log(values);
       try {
-        const user = { email: 'paul@outlook.es', password: '123456' };
+        const user = await login(formik.values.email, formik.values.password);
         if (user) {
           navigate('/home');
           console.log('Logged in user:', user);
@@ -104,9 +104,6 @@ const LoginForm = () => {
           className="w-full bg-indigo-500 text-white"
         />
       </form>
-      {/* <Toast ref={toast} position="bottom-left" /> */}
-      {/* <div className="card flex justify-content-center">
-        </div> */}
     </>
   );
 };

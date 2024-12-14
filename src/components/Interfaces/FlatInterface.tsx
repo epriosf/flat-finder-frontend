@@ -1,20 +1,15 @@
-// import firebase from 'firebase/compat/app';
-import { Timestamp } from 'firebase/firestore';
-
-// components/Interfaces/FlatInterface.tsx
+import { User } from './UserInterface';
 export interface Flat {
-  flatId: string;
-  areaSize: number | null;
+  _id: string;
   city: string;
-  dateAvailable: Timestamp | Date | null;
-  hasAc: boolean;
-  price: number | null;
   streetName: string;
   streetNumber: number | null;
+  areaSize: number | null;
+  hasAc: boolean;
   yearBuilt: number | null;
-  flatImage: string;
-  //   creator: string; // This will be the ID of the creator from FlatUser
-  flatUser: string;
+  rentPrice: number | null;
+  dateAvailable: [Date] | null;
+  ownerId: User;
   rooms: number | null;
   bathrooms: number | null;
 }
