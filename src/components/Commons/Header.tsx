@@ -1,13 +1,13 @@
 import { Button } from 'primereact/button';
 import { Image } from 'primereact/image';
 import { useState } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 import LogoWhite from './../../images/logo-white.svg';
 import Navbar from './Navbar';
-//import { useAuth } from '../../hooks/useAuth';
 
 const Header = () => {
   const [visible, setVisible] = useState<boolean>(false);
-  // const { user } = useAuth();
+  const { user } = useAuth();
 
   // const btnRef1 = useRef<any>(null);
   // const btnRef2 = useRef<any>(null);
@@ -24,8 +24,7 @@ const Header = () => {
           <a href="/home">
             <Image src={LogoWhite} alt="Image" width="115" />
           </a>
-          {/* <p>Hello {user?.firstName}!</p> */}
-          <p>Hello </p>
+          <p>Hello {user?.firstName}!</p>
         </div>
         <Button icon="pi pi-bars" onClick={() => setVisible(true)} />
       </header>
