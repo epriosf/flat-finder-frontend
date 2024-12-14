@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useEffect, useState } from 'react';
 import { User } from './../components/Interfaces/UserInterface';
 import {
@@ -6,7 +5,15 @@ import {
   loginUser,
   logoutUser,
 } from './../services/authService';
-export const AuthContext = createContext<any>(null);
+export interface AuthContextType {
+  user: User | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<User>;
+  logout: () => Promise<void>;
+}
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined,
+);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,

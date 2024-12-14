@@ -7,7 +7,8 @@ const getFlats = async (queryParams: Record<string, any> = {}) => {
   try {
     // Get the auth token (for authorization)
     const authToken = localStorage.getItem('authToken') || ''; // Assuming token is stored in localStorage
-
+    console.log('authToken', authToken);
+    console.log('queryparams', queryParams);
     const queryString = new URLSearchParams(queryParams).toString();
     const response = await fetch(`${API_URL}?${queryString}`, {
       method: 'GET',

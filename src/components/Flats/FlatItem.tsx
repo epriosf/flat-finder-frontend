@@ -2,7 +2,7 @@ import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { Chip } from 'primereact/chip';
 // import { Image } from 'primereact/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 //import { getUserByEmail, toggleFavoriteFlat } from '../../services/firebase';
 import { format } from 'date-fns';
 import { Avatar } from 'primereact/avatar';
@@ -12,7 +12,6 @@ import { Flat } from '../Interfaces/FlatInterface'; // Updated import
 import FlatImg from './../../images/apt-21.jpg';
 import UserImg from './../../images/profile.png';
 //import { db } from '../../config/firebase';
-//import { useAuth } from '../../hooks/useAuth';
 import { useAuth } from '../../hooks/useAuth';
 import FlatDetailsPage from '../../pages/FlatDetailsPage';
 interface FlatItemProps {
@@ -30,19 +29,18 @@ const FlatItem: React.FC<FlatItemProps> = ({
   onDeleteRequest,
   onFavoriteToggle,
 }) => {
-  //const [user, setUser] = useState<User | null>(null);
-  //const [loading, setLoading] = useState<boolean>(true);
   const [viewDialogVisible, setViewDialogVisible] = useState(false);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
   const { user: loggedUser } = useAuth();
+
   const [isFavorite, setIsFavorite] = useState(false);
   const initialDate = flat.dateAvailable ? flat.dateAvailable[0] : null;
   const endDate =
     flat.dateAvailable && flat.dateAvailable.length > 1
       ? flat.dateAvailable[flat.dateAvailable.length - 1]
       : null;
+  console.log('flat', JSON.stringify(flat));
 
-  // Format the dates if they are valid
   const formattedInitialDate = initialDate
     ? format(new Date(initialDate), 'MMMM dd, yyyy')
     : 'N/A';
@@ -50,37 +48,22 @@ const FlatItem: React.FC<FlatItemProps> = ({
     ? format(new Date(endDate), 'MMMM dd, yyyy')
     : 'N/A';
 
-  // Fetch the user data related to the flat
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const fetchedUser = await getUserById(flat.ownerId);
-  //       setUser(fetchedUser.length > 0 ? fetchedUser[0] : null);
-  //     } catch (error) {
-  //       console.error('Failed to fetch user:', error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchUser();
-  // }, [flat.ownerId]);
-
-  // Check if the flat is already in the user's favorites
-  useEffect(() => {
-    const checkIfFavorite = async () => {
-      //   if (loggedUser) {
-      // const usersRef = collection(db, 'users');
-      //const q = query(usersRef, where('email', '==', loggedUser.email));
-      //const querySnapshot = await getDocs(q);
-      // if (!querySnapshot.empty) {
-      //   const userDoc = querySnapshot.docs[0];
-      //   const userData = userDoc.data();
-      //   setIsFavorite(userData.favoriteFlats?.includes(flat.flatId));
-      // }
-      //   }
-    };
-    checkIfFavorite();
-  }, [loggedUser, flat._id]);
+  //Check if the flat is already in the user's favorites
+  //useEffect(() => {
+  //  const checkIfFavorite = async () => {
+  //   if (loggedUser) {
+  // const usersRef = collection(db, 'users');
+  //const q = query(usersRef, where('email', '==', loggedUser.email));
+  //const querySnapshot = await getDocs(q);
+  // if (!querySnapshot.empty) {
+  //   const userDoc = querySnapshot.docs[0];
+  //   const userData = userDoc.data();
+  //   setIsFavorite(userData.favoriteFlats?.includes(flat.flatId));
+  // }
+  //   }
+  // };
+  // checkIfFavorite();
+  //}, [loggedUser, flat._id]);
 
   const handleCardClick = () => {
     setViewDialogVisible(true);
@@ -110,32 +93,20 @@ const FlatItem: React.FC<FlatItemProps> = ({
 
   const handleFavoriteClick = async (event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent card click from triggering
-    // if (loggedUser) {
-    try {
-      // await toggleFavoriteFlat(loggedUser.email, flat.flatId, isFavorite);
-      setIsFavorite(!isFavorite);
-      if (onFavoriteToggle) {
-        onFavoriteToggle(flat._id, !isFavorite);
+    if (loggedUser) {
+      try {
+        // await toggleFavoriteFlat(loggedUser.email, flat.flatId, isFavorite);
+        setIsFavorite(!isFavorite);
+        if (onFavoriteToggle) {
+          onFavoriteToggle(flat._id, !isFavorite);
+        }
+      } catch (error) {
+        console.error('Error toggling favorite:', error);
       }
-    } catch (error) {
-      console.error('Error toggling favorite:', error);
+    } else {
+      console.error('User is not logged in');
     }
-    //  } else {
-    //  console.error('User is not logged in');
-    // }
   };
-
-  // if (loading) {
-  //   return (
-  //     <div>
-  //       <i className="pi pi-spin pi-spinner"></i> Loading...
-  //     </div>
-  //   );
-  // }
-
-  // if (!user) {
-  //   return <div>User not found</div>;
-  // }
 
   // Header and footer for Card component
   const headerCard = (
@@ -144,7 +115,7 @@ const FlatItem: React.FC<FlatItemProps> = ({
 
   const footerCard = (
     <div className="flex gap-2">
-      {loggedUser && loggedUser._id === flat.ownerId && (
+      {loggedUser && loggedUser._id === flat.ownerId._id && (
         <Button
           icon="pi pi-trash"
           className="bg-primary-100"
@@ -156,7 +127,7 @@ const FlatItem: React.FC<FlatItemProps> = ({
           onClick={handleDeleteClick}
         />
       )}
-      {loggedUser && loggedUser._id === flat.ownerId && (
+      {loggedUser && loggedUser._id === flat.ownerId!._id && (
         <Button
           icon="pi pi-pencil"
           className="bg-primary-100"

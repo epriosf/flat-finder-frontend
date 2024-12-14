@@ -10,6 +10,7 @@ interface MainNavigationProps {
 const MainNavigation = ({ setVisible }: MainNavigationProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  console.log(user);
 
   const handleLogout = () => {
     logoutUser();

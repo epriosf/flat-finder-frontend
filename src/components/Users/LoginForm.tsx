@@ -34,7 +34,7 @@ const LoginForm = () => {
         const user = await login(formik.values.email, formik.values.password);
         if (user) {
           navigate('/home');
-          console.log('Logged in user:', user);
+          console.log('Logged in user:', JSON.stringify(user));
           setLoginError(false);
         } else {
           console.error('Error logging in user:', user);
