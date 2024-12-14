@@ -1,16 +1,15 @@
+import { Avatar } from 'primereact/avatar';
 import { Ripple } from 'primereact/ripple';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import { logoutUser } from '../../../services/authService';
 interface MainNavigationProps {
-  // visible: boolean;
   setVisible: (visible: boolean) => void;
 }
 
 const MainNavigation = ({ setVisible }: MainNavigationProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  console.log(user);
 
   const handleLogout = () => {
     logoutUser();
@@ -118,28 +117,19 @@ const MainNavigation = ({ setVisible }: MainNavigationProps) => {
           className="m-3 flex align-items-center cursor-pointer p-3 gap-2 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple no-underline"
           onClick={handleVisible}
         >
-          {/* <div className="flex items-center">
-            <Avatar image={user?.profile} shape="circle" size="xlarge" />
-            <div className="ml-3">
-              <p className="font-bold mt-1">
-                {user?.firstName} {user?.lastName}
-              </p>
-              <p className="text-sm text-gray-500 mt-0 pt-0">{user?.email}</p>
-            </div>
-          </div> */}
           <div className="mt-4 flex gap-2 align-items-center">
-            {/* <Avatar
+            <Avatar
               image={user!.profile}
               imageAlt="{user.firstName} {user.lastName}"
               className="mr-2"
               size="large"
               shape="circle"
-            /> */}
+            />
             <div>
-              {/* <p className="font-bold m-0">
+              <p className="font-bold m-0">
                 {user!.firstName} {user!.lastName}
               </p>
-              <p className="text-sm text-gray-500 m-0">{user!.email}</p> */}
+              <p className="text-sm text-gray-500 m-0">{user!.email}</p>
             </div>
           </div>
         </NavLink>

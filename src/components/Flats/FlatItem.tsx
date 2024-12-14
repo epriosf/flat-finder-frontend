@@ -39,7 +39,6 @@ const FlatItem: React.FC<FlatItemProps> = ({
     flat.dateAvailable && flat.dateAvailable.length > 1
       ? flat.dateAvailable[flat.dateAvailable.length - 1]
       : null;
-  console.log('flat', JSON.stringify(flat));
 
   const formattedInitialDate = initialDate
     ? format(new Date(initialDate), 'MMMM dd, yyyy')
