@@ -1,18 +1,16 @@
-import { Timestamp } from 'firebase/firestore';
 import { useFormik } from 'formik';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
 import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
 import { FloatLabel } from 'primereact/floatlabel';
 import { IconField } from 'primereact/iconfield';
-import { Image } from 'primereact/image';
 import { InputIcon } from 'primereact/inputicon';
 import { InputSwitch, InputSwitchChangeEvent } from 'primereact/inputswitch';
 import { Message } from 'primereact/message';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-//import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 //import {
 //  createFlat,
 //  uploadFlatImage,
@@ -69,45 +67,40 @@ const FlatForm: React.FC<FlatFormProps> = ({
 }) => {
   //const [flatFile, setFlatFile] = useState<File | null>(null);
   const navigate = useNavigate();
-  //const { user } = defaultUser;
+  const { user } = useAuth();
 
-  useEffect(
-    () => {
-      // if (!user) {
-      //   navigate('/');
-      // }
-    },
-    // [user, navigate]
-  );
+  useEffect(() => {
+    if (!user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const formik = useFormik({
     initialValues: {
       areaSize: initialFlat?.areaSize || (null as number | null),
       city: initialFlat?.city || '',
       dateAvailable: initialFlat?.dateAvailable
-        ? initialFlat.dateAvailable instanceof Timestamp
-          ? initialFlat.dateAvailable.toDate()
-          : initialFlat.dateAvailable
+        ? initialFlat.dateAvailable
         : null,
       hasAc: initialFlat?.hasAc || false,
-      price: initialFlat?.price || (null as number | null),
+      price: initialFlat?.rentPrice || (null as number | null),
       streetName: initialFlat?.streetName || '',
       streetNumber: initialFlat?.streetNumber || (null as number | null),
       yearBuilt: initialFlat?.yearBuilt || (null as number | null),
-      flatImage: initialFlat?.flatImage || '',
+      flatImage: '',
       rooms: initialFlat?.rooms || (null as number | null),
       bathrooms: initialFlat?.bathrooms || (null as number | null),
     },
     validationSchema: FlatSchema,
     onSubmit: async (values, { resetForm }) => {
-      // if (!user?.email) {
-      // Handle the error appropriately, such as displaying a message to the user
-      console.error(
-        'User is not logged in or email is not available.',
-        JSON.stringify(values),
-      );
-      //  return;
-      // }
+      if (!user?.email) {
+        // Handle the error appropriately, such as displaying a message to the user
+        console.error(
+          'User is not logged in or email is not available.',
+          JSON.stringify(values),
+        );
+        return;
+      }
       //let imageUrl = initialFlat?.flatImage || '';
 
       try {
@@ -132,7 +125,7 @@ const FlatForm: React.FC<FlatFormProps> = ({
         //   flatImage: imageUrl,
         // };
 
-        if (isEditing && initialFlat?.flatId) {
+        if (isEditing && initialFlat?._id) {
           try {
             //  await updateFlat({ ...flatData, flatId: initialFlat.flatId });
             if (onFormSubmit) {
@@ -168,14 +161,14 @@ const FlatForm: React.FC<FlatFormProps> = ({
     //  setFlatFile(file);
   };
 
-  const handleDateChange = (
-    field: string,
-    value: Date | Date[] | undefined,
-  ) => {
-    const date =
-      value instanceof Date ? value : Array.isArray(value) ? value[0] : null;
-    formik.setFieldValue(field, date);
-  };
+  // const handleDateChange = (
+  //   field: string,
+  //   value: Date | Date[] | undefined,
+  // ) => {
+  //   const date =
+  //     value instanceof Date ? value : Array.isArray(value) ? value[0] : null;
+  //   formik.setFieldValue(field, date);
+  // };
   return (
     <>
       <form
@@ -345,7 +338,7 @@ const FlatForm: React.FC<FlatFormProps> = ({
             <FloatLabel>
               <IconField iconPosition="left">
                 <InputIcon className="pi pi-calendar text-500"> </InputIcon>
-                <Calendar
+                {/* <Calendar
                   id="dateAvailable"
                   value={formik.values.dateAvailable}
                   onChange={(e) =>
@@ -358,7 +351,7 @@ const FlatForm: React.FC<FlatFormProps> = ({
                   maxDate={maxDate}
                   dateFormat="dd/mm/yy"
                   className="w-full"
-                />
+                /> */}
               </IconField>
               <label htmlFor="dateAvailable" className="left-3 text-400">
                 Date Available
@@ -407,14 +400,14 @@ const FlatForm: React.FC<FlatFormProps> = ({
         </div>
 
         {/* Image */}
-        {initialFlat?.flatImage && (
+        {/* {initialFlat?.flatImage && (
           <Image
             src={initialFlat?.flatImage}
             alt={initialFlat?.streetNumber + ' ' + initialFlat?.streetName}
             className="flat-img-form object-cover "
             width="150"
           />
-        )}
+        )} */}
 
         <FileUpload
           name="demo[]"
