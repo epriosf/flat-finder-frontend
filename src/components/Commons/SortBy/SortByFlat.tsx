@@ -67,7 +67,7 @@ export const SortByFlats: React.FC<SortByFlatsProps> = ({
     switch (key) {
       case 'city':
         return 'map-marker';
-      case 'price':
+      case 'rentPrice':
         return 'dollar';
       case 'areaSize':
         return 'expand';

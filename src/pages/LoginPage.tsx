@@ -12,20 +12,6 @@ const LoginPage = () => {
     <div className="card w-full ">
       <h2 className="text-center text-white">Welcome to FlatFinder</h2>
       <LoginForm />
-      {/* <TabView className="bg-transparent border-round-lg w-full justify-content-center h-full">
-          <TabPanel
-            header="Log In"
-            className="text-white bg-transparent text-center justify-content-center"
-          >
-            <LoginForm />
-          </TabPanel>
-          <TabPanel
-            header="Sign Up"
-            className="text-white bg-transparent text-center justify-content-center"
-          >
-            <RegisterPage />
-          </TabPanel>
-        </TabView> */}
     </div>
   );
 };

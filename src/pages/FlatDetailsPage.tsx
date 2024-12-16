@@ -1,14 +1,14 @@
-import { Timestamp } from 'firebase/firestore';
+import { format } from 'date-fns';
 import { Avatar } from 'primereact/avatar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Flat } from '../components/Interfaces/FlatInterface';
-import { User } from '../components/Interfaces/UserInterface'; // Use your custom User interface
 import MessageForm from '../components/Messages/MessageForm';
 import MessageList from '../components/Messages/MessageList';
-//import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import FlatImg from './../images/apt-21.jpg';
 import BathroomIcon from './../images/bathroomIcon.svg';
+import UserImg from './../images/profile.png';
 import RoomIcon from './../images/roomIcon.svg';
 
 interface FlatDetailsPageProps {
@@ -16,83 +16,45 @@ interface FlatDetailsPageProps {
 }
 
 const FlatDetailsPage: React.FC<FlatDetailsPageProps> = ({ flat }) => {
-  const [userF, setUserF] = useState<User | null>(null);
-  const [loadingF, setLoadingF] = useState(true);
-  //const isLoading = false;
-  const user: User = {
-    firstName: 'paul',
-    lastName: 'rios',
-    profile: 'string',
-    email: 'prios@outlook.es',
-    birthday: new Date(),
-    role: 'admin',
-    id: 'string',
-    profileImage: 'string',
-    isAdmin: true,
-  };
-
+  const { user, loading } = useAuth(); // Assume `useAuth` provides `isLoading`
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (!loading && !user) {
-  navigate('/login');
-  //   }
-  // }, [user, loading, navigate]);
-
-  // if (loading) {
-  //   return (
-  //     <div>
-  //       <i className="pi pi-spin pi-spinner"></i> Loading...
-  //     </div>
-  //   );
-  // }
-
-  // Fetch the user data related to the flat
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const fetchedUser: User[] = [];
-        setUserF(fetchedUser.length > 0 ? fetchedUser[0] : null); // Use your custom User type here
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
-      } finally {
-        setLoadingF(false);
-      }
-    };
-    fetchUser();
-  }, [flat.flatUser]);
+    if (!loading && !user) {
+      navigate('/login');
+    }
+  }, [user, loading, navigate]);
 
-  const formatDate = (date: Timestamp | Date): string => {
-    const dateObj = date instanceof Timestamp ? date.toDate() : date;
-    const formatter = new Intl.DateTimeFormat('en-GB', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-    return formatter.format(dateObj);
-  };
-
-  const formattedDate = flat.dateAvailable
-    ? formatDate(flat.dateAvailable)
-    : 'N/A';
-
-  if (loadingF) {
+  if (loading) {
     return (
       <div>
         <i className="pi pi-spin pi-spinner"></i> Loading...
       </div>
     );
   }
+  const initialDate = flat.dateAvailable ? flat.dateAvailable[0] : null;
+  const endDate =
+    flat.dateAvailable && flat.dateAvailable.length > 1
+      ? flat.dateAvailable[flat.dateAvailable.length - 1]
+      : null;
+
+  const formattedInitialDate = initialDate
+    ? format(new Date(initialDate), 'MMMM dd, yyyy')
+    : 'N/A';
+  const formattedEndDate = endDate
+    ? format(new Date(endDate), 'MMMM dd, yyyy')
+    : 'N/A';
 
   return (
     <>
       <div>
         <img
           alt={`${flat.streetNumber} ${flat.streetName}`}
-          src={flat.flatImage || FlatImg}
+          //  src={flat.flatImage || FlatImg}
+          src={FlatImg}
           className="border-round-lg w-full"
         />
-        <h2 className="text-primary  mb-0">${flat.price}</h2>
+        <h2 className="text-primary  mb-0">${flat.rentPrice}</h2>
 
         {/* place */}
         <div className="flex text-500 gap-2 text-sm mt-1">
@@ -103,20 +65,21 @@ const FlatDetailsPage: React.FC<FlatDetailsPageProps> = ({ flat }) => {
         </div>
 
         {/* owner */}
-        {userF && (
+        {flat.ownerId && (
           <div className="mt-4 flex gap-2 align-items-center">
             <Avatar
-              image={userF.profile}
-              imageAlt={`${userF.firstName} ${userF.lastName}`}
+              // image={userF.profile}
+              image={UserImg}
+              imageAlt={`${flat.ownerId.firstName} ${flat.ownerId.lastName}`}
               className="mr-2"
               size="large"
               shape="circle"
             />
             <div>
               <p className="text-600 m-0">
-                Listed by {userF.firstName} {userF.lastName}
+                Listed by {flat.ownerId.firstName} {flat.ownerId.lastName}
               </p>
-              <p className="text-600 m-0">{userF.email}</p>
+              <p className="text-600 m-0">{flat.ownerId.email}</p>
             </div>
           </div>
         )}
@@ -161,18 +124,22 @@ const FlatDetailsPage: React.FC<FlatDetailsPageProps> = ({ flat }) => {
         <div className="flex gap-2 w-full">
           <i className="pi pi-calendar"></i>
           <p className="m-0">
-            Available on: <span className="font-bold">{formattedDate}</span>
+            Available from:{' '}
+            <span className="font-bold">{formattedInitialDate}</span>
+          </p>
+          <p className="m-0">
+            Available to: <span className="font-bold">{formattedEndDate}</span>
           </p>
         </div>
       </div>
       {/* Messages list */}
       <MessageList
-        flatId={flat.flatId}
+        flatId={flat._id}
         userEmail={user!.email}
         isAdmin={user!.isAdmin}
       />
       <MessageForm
-        flatId={flat.flatId}
+        flatId={flat._id}
         userEmail={user!.email}
         isAdmin={user!.isAdmin}
       />

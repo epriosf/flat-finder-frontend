@@ -7,7 +7,6 @@ interface EditFlatPageProps {
 }
 
 const EditFlatPage: React.FC<EditFlatPageProps> = ({ flat, onClose }) => {
-  console.log('Flat ID in EditFlatPage:', flat.flatId); // Debugging
   return (
     <div>
       {/* Pass the flat data and set isEditing to true */}

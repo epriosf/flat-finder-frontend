@@ -1,9 +1,9 @@
 import { Paginator, PaginatorPageChangeEvent } from 'primereact/paginator';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FlatList from '../components/Flats/FlatList';
 import FlatTitle from '../components/Flats/FlatTitle';
 import { Flat } from '../components/Interfaces/FlatInterface';
-//import { getFlats } from '../services/firebase';
+import getFlats from '../services/flatsService';
 
 const HomePage = () => {
   const [flats, setFlats] = useState<Flat[]>([]);
@@ -11,15 +11,14 @@ const HomePage = () => {
   const [first, setFirst] = useState<number>(0);
   const [rows, setRows] = useState<number>(9);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const data = await getFlats();
-  //     setFlats(data as Flat[]);
-  //     setFilteredFlats(data as Flat[]); // Initialize with full data set
-  //   };
-  //   fetchData();
-  // }, []);
-  setFlats([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getFlats();
+      setFlats(data.flats);
+      setFilteredFlats(data.flats as Flat[]); // Initialize with full data set
+    };
+    fetchData();
+  }, []);
 
   // Update the flats list after pagination change
   const onPageChange = (event: PaginatorPageChangeEvent) => {
@@ -31,7 +30,7 @@ const HomePage = () => {
   // Handle flat deletion and update the flats list accordingly
   const handleFlatDeleted = (deletedFlatId: string) => {
     setFilteredFlats(
-      filteredFlats.filter((flat) => flat.flatId !== deletedFlatId),
+      filteredFlats.filter((flat) => flat._id !== deletedFlatId),
     );
   };
 

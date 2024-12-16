@@ -29,11 +29,9 @@ const MyFlatsPage: React.FC = () => {
 
   const handleDelete = async (flatId: string) => {
     try {
-      setFlats((prevFlats) =>
-        prevFlats.filter((flat) => flat.flatId !== flatId),
-      ); // Update state after deletion
+      setFlats((prevFlats) => prevFlats.filter((flat) => flat._id !== flatId)); // Update state after deletion
       setFilteredFlats((prevFlats) =>
-        prevFlats.filter((flat) => flat.flatId !== flatId),
+        prevFlats.filter((flat) => flat._id !== flatId),
       ); // Update filtered flats after deletion
     } catch (error) {
       console.error('Failed to delete the flat:', error);

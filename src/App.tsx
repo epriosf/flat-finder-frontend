@@ -4,12 +4,12 @@ import {
   Navigate,
   RouterProvider,
 } from 'react-router-dom';
+import PrivateRoute from './components/Path/PrivateRoute';
+import { AuthProvider } from './contexts/authContext';
 import './custompanel.css';
 import ErrorPage from './pages/ErrorPage';
 import LoginRegister from './pages/LoginRegisterPage';
 import RootLayout from './pages/RootPage';
-//import { AuthProvider } from './contexts/authContext';
-import PrivateRoute from './components/Path/PrivateRoute';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -149,9 +149,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    //   <AuthProvider>
-    <RouterProvider router={router} />
-    //  </AuthProvider>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   );
 }
 
