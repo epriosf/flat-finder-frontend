@@ -58,10 +58,10 @@ const FavouritesPage: React.FC = () => {
     if (!isFavorite) {
       // Remove the flat from the list if it's unfavorited
       setFavoriteFlats((prevFlats) =>
-        prevFlats.filter((flat) => flat.flatId !== flatId),
+        prevFlats.filter((flat) => flat._id !== flatId),
       );
       setFilteredFlats((prevFlats) =>
-        prevFlats.filter((flat) => flat.flatId !== flatId),
+        prevFlats.filter((flat) => flat._id !== flatId),
       );
     }
   };
@@ -93,10 +93,10 @@ const FavouritesPage: React.FC = () => {
           flats={filteredFlats} // Use the filtered flats for display
           onFlatDeleted={(flatId) => {
             setFavoriteFlats((prevFlats) =>
-              prevFlats.filter((flat) => flat.flatId !== flatId),
+              prevFlats.filter((flat) => flat._id !== flatId),
             );
             setFilteredFlats((prevFlats) =>
-              prevFlats.filter((flat) => flat.flatId !== flatId),
+              prevFlats.filter((flat) => flat._id !== flatId),
             );
           }}
           onFavoriteToggle={handleFavoriteToggle} // Pass the callback

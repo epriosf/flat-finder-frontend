@@ -5,10 +5,10 @@ import {
   InputNumber,
   InputNumberValueChangeEvent,
 } from 'primereact/inputnumber';
+import { InputText } from 'primereact/inputtext';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { useRef, useState } from 'react';
 import { Flat } from '../../Interfaces/FlatInterface';
-import { InputText } from 'primereact/inputtext';
 
 interface FilterByFlatsProps {
   setFilteredFlats: (flats: Flat[]) => void;
@@ -65,8 +65,10 @@ const FilterByFlats: React.FC<FilterByFlatsProps> = ({
         ? flat.city.toLowerCase().includes(city.toLowerCase())
         : true;
       const priceCondition =
-        (minPrice == null || (flat.price != null && flat.price >= minPrice)) &&
-        (maxPrice == null || (flat.price != null && flat.price <= maxPrice));
+        (minPrice == null ||
+          (flat.rentPrice != null && flat.rentPrice >= minPrice)) &&
+        (maxPrice == null ||
+          (flat.rentPrice != null && flat.rentPrice <= maxPrice));
       const areaCondition =
         (minArea == null ||
           (flat.areaSize != null && flat.areaSize >= minArea)) &&
