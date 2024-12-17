@@ -4,6 +4,7 @@ import { Dialog } from 'primereact/dialog';
 import { useState } from 'react';
 import { User } from '../Interfaces/UserInterface';
 import bgProfile from './../../images/bg-profile.png';
+import UpdateProfile from './UpdateProfileAdmin';
 //import UpdateProfile from './UpdateProfile';
 interface ProfileViewProps {
   user: User;
@@ -16,7 +17,7 @@ const ProfileView = ({ user }: ProfileViewProps) => {
   const handleDialogClose = () => {
     setDialogVisible(false);
   };
-  console.log(user.birthday);
+  console.log(JSON.stringify(user));
   return (
     <>
       <div className="w-full">
@@ -27,7 +28,7 @@ const ProfileView = ({ user }: ProfileViewProps) => {
             alt="Ornare"
           />
           <Avatar
-            image={user.profile}
+            image={user.profileImage}
             size="xlarge"
             className="flex absolute w-5rem h-5rem border-round-md"
             shape="circle"
@@ -56,6 +57,7 @@ const ProfileView = ({ user }: ProfileViewProps) => {
               <div className="text-500 w-full md:w-3 font-medium">Email</div>
               <div className="text-900 w-full md:w-9">{user.email}</div>
             </li>
+
             <li className="flex align-items-center py-3 px-2 flex-wrap">
               <div className="text-500 w-full md:w-3 font-medium">Birthday</div>
               <div className="text-900 w-full md:w-9">2000-02-02</div>
@@ -77,15 +79,15 @@ const ProfileView = ({ user }: ProfileViewProps) => {
         style={{ width: '50vw' }}
         onHide={handleDialogClose}
       >
-        {/* {user ? (
+        {user ? (
           <UpdateProfile
-            userUpdate={{ ...user, password: '' }}
+            userUpdate={{ ...user }}
             isAdminister={user.isAdmin}
             onClose={handleDialogClose}
           />
         ) : (
           <div>Loading...</div>
-        )}{' '} */}
+        )}{' '}
       </Dialog>
     </>
   );

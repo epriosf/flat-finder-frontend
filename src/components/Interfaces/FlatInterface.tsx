@@ -26,3 +26,17 @@ export interface FlatOrderBy {
   price: number;
   area: number;
 }
+
+export interface Pagination {
+  total: number; // Total number of records
+  limit: number; // Number of items per page
+  page: number; // Current page number
+  totalPages: number; // Total number of pages
+  hasNextPage: boolean; // Indicates if there is a next page
+  hasPreviousPage: boolean; // Indicates if there is a previous page
+}
+
+export interface FlatsResponse {
+  flats: Flat[];
+  pagination: Pagination;
+}

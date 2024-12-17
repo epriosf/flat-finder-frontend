@@ -8,19 +8,17 @@ import {
 import { InputSwitch, InputSwitchChangeEvent } from 'primereact/inputswitch';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { useRef, useState } from 'react';
-import { UserRegister } from '../../Interfaces/UserInterface';
+import { UserDetail } from '../../Interfaces/UserInterface';
 import { calculateAge } from '../../Users/UserList';
 
 interface FilterByProps<T> {
   setItems: (items: T[]) => void;
   originalItems: T[];
-  flatsCount?: Record<string, number>;
 }
 
-const FilterByUser = <T extends UserRegister>({
+const FilterByUser = <T extends UserDetail>({
   setItems,
   originalItems,
-  flatsCount,
 }: FilterByProps<T>) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(true);
   const [minAge, setMinAge] = useState<number | null>(null);
@@ -44,18 +42,18 @@ const FilterByUser = <T extends UserRegister>({
   };
   const handleButtonClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let filteredUsers = originalItems.filter((item: UserRegister) => {
+    let filteredUsers = originalItems.filter((item: UserDetail) => {
       const age = calculateAge(new Date(item.birthday));
 
       const ageCondition =
         (minAge == null || age >= minAge) && (maxAge == null || age <= maxAge);
-      const rangeCondition = flatsCount
-        ? (minRange == null || flatsCount[item.email] >= minRange) &&
-          (maxRange == null || flatsCount[item.email] <= maxRange)
-        : true;
+      const rangeFlatCondition =
+        (minRange == null || item.flatsCount >= minRange) &&
+        (maxRange == null || item.flatsCount <= maxRange);
+
       const adminCondition = isAdmin ? item.isAdmin : !item.isAdmin;
 
-      return ageCondition && rangeCondition && adminCondition;
+      return ageCondition && rangeFlatCondition && adminCondition;
     });
 
     setItems(filteredUsers);
