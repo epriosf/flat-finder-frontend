@@ -43,7 +43,7 @@ const FilterByUser = <T extends UserDetail>({
   const handleButtonClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let filteredUsers = originalItems.filter((item: UserDetail) => {
-      const age = calculateAge(new Date(item.birthDate));
+      const age = calculateAge(new Date(item.birthday));
 
       const ageCondition =
         (minAge == null || age >= minAge) && (maxAge == null || age <= maxAge);
