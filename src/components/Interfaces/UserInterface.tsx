@@ -48,9 +48,10 @@ export interface UserDetail {
   email: string;
   firstName: string;
   lastName: string;
-  birthDate: Date;
+  birthday: Date;
   isAdmin: boolean;
   favouriteFlats: string[]; // Array of favourite flat IDs
   role: string;
   flatsCount: number; // Number of flats created by the user
+  profileImage: string;
 }

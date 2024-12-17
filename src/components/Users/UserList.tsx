@@ -107,10 +107,10 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
           >
             <UserCard
               user={user}
-              age={calculateAge(user.birthDate)}
+              age={calculateAge(user.birthday)}
               birthday={
-                user.birthDate
-                  ? new Date(user.birthDate).toLocaleDateString('en-GB') // Convert to Date here
+                user.birthday
+                  ? new Date(user.birthday).toLocaleDateString('en-GB') // Convert to Date here
                   : 'N/A'
               }
               flatsNumber={user.flatsCount || 0}
