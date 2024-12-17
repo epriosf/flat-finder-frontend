@@ -4,12 +4,11 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
-  profile: string;
   birthday: Date;
   role: string;
   profileImage: string;
   isAdmin: boolean;
-  favouriteFlats: Flat[];
+  favouriteFlats: string[];
 }
 export interface UserOrderBy {
   email: string;
@@ -24,7 +23,7 @@ export interface UserRegister {
   email: string;
   password: string;
   birthday: Date;
-  profile: string;
+  profileImage: string;
   isAdmin: boolean;
 }
 
@@ -32,5 +31,26 @@ export interface UserMessage {
   firstName: string;
   lastName: string;
   email: string;
-  profile: string;
+  profileImage: string;
+}
+export interface FlatsResponse {
+  flats: Flat[];
+  pagination: {
+    limit: number;
+    page: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+}
+export interface UserDetail {
+  _id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  birthDate: Date;
+  isAdmin: boolean;
+  favouriteFlats: string[]; // Array of favourite flat IDs
+  role: string;
+  flatsCount: number; // Number of flats created by the user
 }

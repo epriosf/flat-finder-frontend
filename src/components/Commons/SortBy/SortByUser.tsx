@@ -8,7 +8,6 @@ interface SortByProps<T> {
   setItems: (items: T[]) => void;
   keys: Array<keyof T | 'flatsCount'>;
   labels: string[];
-  flatsCount?: Record<string, number>;
 }
 
 interface JustifyOption {
@@ -20,7 +19,6 @@ export const SortByUser = <T extends { email: string }>({
   setItems,
   keys,
   labels,
-  flatsCount,
 }: SortByProps<T>) => {
   const [selectedSortKey, setSelectedSortKey] = useState<
     keyof T | 'flatsCount' | null
@@ -38,12 +36,6 @@ export const SortByUser = <T extends { email: string }>({
 
   const handleSort = (key: keyof T | 'flatsCount', order: 'asc' | 'desc') => {
     const sortedItems = [...items].sort((a, b) => {
-      if (key === 'flatsCount' && flatsCount) {
-        const countA = flatsCount[a.email] || 0;
-        const countB = flatsCount[b.email] || 0;
-        return order === 'asc' ? countA - countB : countB - countA;
-      }
-
       const valueA = a[key as keyof T];
       const valueB = b[key as keyof T];
 

@@ -3,10 +3,10 @@ import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { Dialog } from 'primereact/dialog';
 import { useState } from 'react';
-import { UserRegister } from '../../Interfaces/UserInterface';
+import { UserDetail } from '../../Interfaces/UserInterface';
 import UpdateProfileAdmin from '../../Users/UpdateProfileAdmin';
 interface UserCardProps {
-  user: UserRegister;
+  user: UserDetail;
   age: number;
   birthday: string;
   flatsNumber: number;
@@ -33,7 +33,7 @@ const UserCard: React.FC<UserCardProps> = ({
   const header = (
     <div className="flex gap-3 align-items-center md:w-25rem mb-0">
       <Avatar
-        image={user.profile}
+        // image={user.profile}
         size="xlarge"
         shape="circle"
         className="my-3 ml-3"
