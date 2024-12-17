@@ -82,7 +82,7 @@ const RegisterPage = () => {
             ? new Date(values.birthday)
             : new Date(today),
           password: values.password,
-          profile: imageUrl,
+          profileImage: imageUrl,
           isAdmin: false,
         };
 

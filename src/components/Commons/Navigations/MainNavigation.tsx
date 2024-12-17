@@ -119,7 +119,7 @@ const MainNavigation = ({ setVisible }: MainNavigationProps) => {
         >
           <div className="mt-4 flex gap-2 align-items-center">
             <Avatar
-              image={user!.profile}
+              image={user!.profileImage}
               imageAlt="{user.firstName} {user.lastName}"
               className="mr-2"
               size="large"

@@ -3,10 +3,10 @@ import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { Dialog } from 'primereact/dialog';
 import { useState } from 'react';
-import { UserDetail } from '../../Interfaces/UserInterface';
+import { User } from '../../Interfaces/UserInterface';
 import UpdateProfileAdmin from '../../Users/UpdateProfileAdmin';
 interface UserCardProps {
-  user: UserDetail;
+  user: User;
   age: number;
   birthday: string;
   flatsNumber: number;
@@ -116,12 +116,11 @@ const UserCard: React.FC<UserCardProps> = ({
         onHide={handleDialogClose}
       >
         {user ? (
-          // <UpdateProfileAdmin
-          //   userUpdate={user}
-          //   isAdminister={user.isAdmin}
-          //   onClose={handleDialogClose}
-          // />
-          <UpdateProfileAdmin />
+          <UpdateProfileAdmin
+            userUpdate={user}
+            isAdminister={user.isAdmin}
+            onClose={handleDialogClose}
+          />
         ) : (
           <div>Loading...</div>
         )}{' '}
