@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 let authToken: string | null = null; // Store the token in memory
-// eslint-disable-next-line no-undef
-const AUTH_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
+
+const AUTH_URL =
+  import.meta.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
 export const loginUser = async (
   email: string,
   password: string,
