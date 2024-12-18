@@ -1,7 +1,8 @@
 import { Flat, Pagination } from '../components/Interfaces/FlatInterface';
 import { FlatsResponse } from '../components/Interfaces/UserInterface';
 
-const API_URL = 'http://localhost:8080/flats'; // Replace with your backend URL
+// eslint-disable-next-line no-undef
+const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
 
 const getFlats = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,7 +12,7 @@ const getFlats = async (
     const authToken = localStorage.getItem('authToken') || '';
     const queryString = new URLSearchParams(queryParams).toString();
 
-    const response = await fetch(`${API_URL}?${queryString}`, {
+    const response = await fetch(`${API_URL}/flats?${queryString}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -114,13 +115,16 @@ const getUserFlats = async (
     if (params.sort) query.append('sort', params.sort);
     if (params.order) query.append('order', params.order);
 
-    const response = await fetch(`${API_URL}/user-flats?${query.toString()}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${authToken}`,
+    const response = await fetch(
+      `${API_URL}/flats/user-flats?${query.toString()}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+        },
       },
-    });
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -142,7 +146,7 @@ const saveFlat = async (flatData: Partial<Flat>): Promise<Flat> => {
       throw new Error('User is not authenticated');
     }
 
-    const response = await fetch(`${API_URL}`, {
+    const response = await fetch(`${API_URL}/flats`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

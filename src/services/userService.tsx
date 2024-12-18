@@ -1,6 +1,7 @@
 import { User, UserDetail } from '../components/Interfaces/UserInterface';
 
-const API_URL = 'http://localhost:8080/users';
+// eslint-disable-next-line no-undef
+const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
 
 export const getUserById = async (id: string): Promise<User> => {
   try {
@@ -11,7 +12,7 @@ export const getUserById = async (id: string): Promise<User> => {
       throw new Error('No token found');
     }
 
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/users/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -53,7 +54,7 @@ export const getUsers = async (
     if (params.sort) query.append('sort', params.sort);
     if (params.order) query.append('order', params.order);
 
-    const response = await fetch(`${API_URL}/?${query.toString()}`, {
+    const response = await fetch(`${API_URL}/users/?${query.toString()}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +84,7 @@ export const updateUser = async (
       throw new Error('Authentication token not found');
     }
 
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/users/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
