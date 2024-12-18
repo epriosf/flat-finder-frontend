@@ -1,7 +1,7 @@
 import { User, UserDetail } from '../components/Interfaces/UserInterface';
 
 const API_URL =
-  import.meta.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
+  import.meta.env.VITE_REACT_APP_BACKEND_URL || 'http://localhost:3000';
 
 export const getUserById = async (id: string): Promise<User> => {
   try {
