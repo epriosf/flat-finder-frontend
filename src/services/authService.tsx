@@ -1,22 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 let authToken: string | null = null; // Store the token in memory
-
+// eslint-disable-next-line no-undef
+const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
 export const loginUser = async (
   email: string,
   password: string,
 ): Promise<any> => {
   try {
     // Send the login request
-    const loginResponse = await fetch(
-      'http://localhost:8080/auth/users/login',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+    const loginResponse = await fetch(`${backendUrl}/auth/users/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+      body: JSON.stringify({ email, password }),
+    });
 
     if (!loginResponse.ok) {
       // Extract error message from response if available
@@ -54,7 +52,7 @@ export const fetchUserInfo = async (): Promise<any> => {
   }
 
   try {
-    const userResponse = await fetch('http://localhost:8080/auth/users/me', {
+    const userResponse = await fetch(`${backendUrl}/auth/users/me`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${authToken}`, // Pass token in the header
