@@ -25,11 +25,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setLoading(true);
     try {
       const userData = await loginUser(email, password);
-      console.log('User data after login:', userData);
       setUser(userData);
       return userData;
     } catch (error) {
-      console.error('Error logging in user:', error);
       setUser(null);
       throw error;
     } finally {

@@ -8,10 +8,11 @@ export interface Flat {
   hasAc: boolean;
   yearBuilt: number | null;
   rentPrice: number | null;
-  dateAvailable: [Date] | null;
+  dateAvailable: [Date, Date] | null;
   ownerId: User;
   rooms: number | null;
   bathrooms: number | null;
+  flatImage?: string;
 }
 
 // export interface FlatFilter {

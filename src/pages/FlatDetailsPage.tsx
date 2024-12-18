@@ -39,11 +39,10 @@ const FlatDetailsPage: React.FC<FlatDetailsPageProps> = ({ flat }) => {
       : null;
 
   const formattedInitialDate = initialDate
-    ? format(new Date(initialDate), 'MMMM dd, yyyy')
+    ? format(new Date(initialDate), 'd')
     : 'N/A';
-  const formattedEndDate = endDate
-    ? format(new Date(endDate), 'MMMM dd, yyyy')
-    : 'N/A';
+  const formattedEndDate = endDate ? format(new Date(endDate), 'd MMM') : 'N/A';
+  const formattedEndYear = endDate ? format(new Date(endDate), 'yyyy') : 'N/A'; // Year from the end date
 
   return (
     <>
@@ -125,10 +124,10 @@ const FlatDetailsPage: React.FC<FlatDetailsPageProps> = ({ flat }) => {
           <i className="pi pi-calendar"></i>
           <p className="m-0">
             Available from:{' '}
-            <span className="font-bold">{formattedInitialDate}</span>
-          </p>
-          <p className="m-0">
-            Available to: <span className="font-bold">{formattedEndDate}</span>
+            <span className="font-bold">
+              {' '}
+              {formattedInitialDate}-{formattedEndDate} {formattedEndYear}
+            </span>
           </p>
         </div>
       </div>

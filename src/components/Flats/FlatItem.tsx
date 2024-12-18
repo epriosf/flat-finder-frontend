@@ -41,11 +41,10 @@ const FlatItem: React.FC<FlatItemProps> = ({
       : null;
 
   const formattedInitialDate = initialDate
-    ? format(new Date(initialDate), 'MMMM dd, yyyy')
+    ? format(new Date(initialDate), 'd')
     : 'N/A';
-  const formattedEndDate = endDate
-    ? format(new Date(endDate), 'MMMM dd, yyyy')
-    : 'N/A';
+  const formattedEndDate = endDate ? format(new Date(endDate), 'd MMM') : 'N/A';
+  const formattedEndYear = endDate ? format(new Date(endDate), 'yyyy') : 'N/A';
 
   //Check if the flat is already in the user's favorites
   //useEffect(() => {
@@ -176,12 +175,12 @@ const FlatItem: React.FC<FlatItemProps> = ({
         </div>
         <p className="p-0 m-0 text-600">
           Available from:
-          <span className="font-bold"> {formattedInitialDate}</span>
+          <span className="font-bold">
+            {' '}
+            {formattedInitialDate}-{formattedEndDate} {formattedEndYear}
+          </span>
         </p>
-        <p className="p-0 m-0 text-600">
-          Available to:
-          <span className="font-bold"> {formattedEndDate}</span>
-        </p>
+
         <Chip
           className={`text-indigo-500 mt-2 ${flat.hasAc ? 'chip-yes' : 'chip-no'}`}
           label={flat.hasAc ? 'Has AC' : 'No AC'}

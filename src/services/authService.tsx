@@ -19,19 +19,24 @@ export const loginUser = async (
     );
 
     if (!loginResponse.ok) {
-      throw new Error('Login failed');
+      // Extract error message from response if available
+      const errorData = await loginResponse.json().catch(() => null);
+      const errorMessage = errorData?.message || 'Login failed';
+      throw new Error(errorMessage);
     }
 
     const data = await loginResponse.json();
-    console.log('token:', data.token);
-    authToken = data.token; // Store the token from the response
+
+    const authToken = data.token;
     if (authToken) {
-      localStorage.setItem('authToken', authToken); // Optional: Persist in localStorage/sessionStorage
+      // Store the token in localStorage
+      localStorage.setItem('authToken', authToken);
+    } else {
+      throw new Error('Authentication token missing in the response');
     }
 
     // Fetch user info
     const userData = await fetchUserInfo();
-    console.log('User data fetched after login:', userData); // Check fetched user data
     return userData;
   } catch (error) {
     console.error('Error in loginUser:', error);

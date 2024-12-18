@@ -21,8 +21,11 @@ const HomePage = () => {
 
   // Redirect to login if the user is not logged in
   useEffect(() => {
-    if (!loggedUser) {
-      navigate('/login'); // Navigate to the login page
+    if (loggedUser === null) {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        navigate('/login'); // Navigate to login if no token exists
+      }
     }
   }, [loggedUser, navigate]);
 

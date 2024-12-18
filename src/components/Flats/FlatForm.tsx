@@ -1,21 +1,20 @@
 import { useFormik } from 'formik';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
-import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
+//import { FileUploadHandlerEvent } from 'primereact/fileupload';
 import { FloatLabel } from 'primereact/floatlabel';
 import { IconField } from 'primereact/iconfield';
+import { Image } from 'primereact/image';
 import { InputIcon } from 'primereact/inputicon';
 import { InputSwitch, InputSwitchChangeEvent } from 'primereact/inputswitch';
 import { Message } from 'primereact/message';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useAuth } from '../../hooks/useAuth';
-//import {
-//  createFlat,
-//  uploadFlatImage,
-//  updateFlat,
-//} from '../../services/firebase';
+//import { updateFlat } from '../../services/firebase';
+import { Toast } from 'primereact/toast';
+import { saveFlat } from '../../services/flatsService';
 import GeneralInput from '../Commons/Inputs/GeneralInput';
 import FormErrorMessage from '../Commons/Inputs/MessageErrors';
 import { Flat } from '../Interfaces/FlatInterface';
@@ -35,10 +34,10 @@ const FlatSchema = Yup.object({
   city: Yup.string()
     .min(2, 'City must have at least 2 characters')
     .required('City Required'),
-  dateAvailable: Yup.date()
-    .required('Date Available Required')
-    .min(minDate, 'Date needs to be in the future')
-    .max(maxDate, 'Date cannot be more than 2 years in the future'),
+  dateAvailable: Yup.array()
+    .of(Yup.date().required('Each date is required'))
+    .length(2, 'Please select a start and end date')
+    .required('Date Available is required'),
   hasAc: Yup.boolean().required('AC Requirement Required'),
   price: Yup.number().nullable().required('Price Required'),
   streetName: Yup.string()
@@ -65,9 +64,10 @@ const FlatForm: React.FC<FlatFormProps> = ({
   isEditing = false,
   onFormSubmit,
 }) => {
-  //const [flatFile, setFlatFile] = useState<File | null>(null);
+  const [flatFile, setFlatFile] = useState<File | null>(null);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const toast = useRef<Toast>(null);
 
   useEffect(() => {
     if (!user) {
@@ -79,55 +79,57 @@ const FlatForm: React.FC<FlatFormProps> = ({
     initialValues: {
       areaSize: initialFlat?.areaSize || (null as number | null),
       city: initialFlat?.city || '',
-      dateAvailable: initialFlat?.dateAvailable
-        ? initialFlat.dateAvailable
-        : null,
+      dateAvailable:
+        initialFlat?.dateAvailable ||
+        ([new Date(), new Date()] as [Date, Date]),
+
       hasAc: initialFlat?.hasAc || false,
       price: initialFlat?.rentPrice || (null as number | null),
       streetName: initialFlat?.streetName || '',
       streetNumber: initialFlat?.streetNumber || (null as number | null),
       yearBuilt: initialFlat?.yearBuilt || (null as number | null),
-      flatImage: '',
+      flatImage: initialFlat?.flatImage || '',
       rooms: initialFlat?.rooms || (null as number | null),
       bathrooms: initialFlat?.bathrooms || (null as number | null),
     },
     validationSchema: FlatSchema,
     onSubmit: async (values, { resetForm }) => {
-      if (!user?.email) {
-        // Handle the error appropriately, such as displaying a message to the user
-        console.error(
-          'User is not logged in or email is not available.',
-          JSON.stringify(values),
-        );
+      if (!user?._id) {
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'User is not logged in',
+          life: 3000,
+        });
         return;
       }
-      //let imageUrl = initialFlat?.flatImage || '';
+
+      let imageUrl =
+        initialFlat?.flatImage ||
+        'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg';
 
       try {
-        // if (flatFile) {
-        //   imageUrl = await uploadFlatImage(flatFile);
-        // }
+        if (flatFile) {
+          // imageUrl = await uploadFlatImage(flatFile);
+        }
 
-        // const flatData: Omit<Flat, 'flatId'> = {
-        //   city: values.city,
-        //   areaSize: values.areaSize,
-        //   dateAvailable: values.dateAvailable
-        //     ? values.dateAvailable
-        //     : Timestamp.now(),
-        //   hasAc: values.hasAc,
-        //   price: values.price,
-        //   streetName: values.streetName,
-        //   streetNumber: values.streetNumber,
-        //   yearBuilt: values.yearBuilt,
-        //   rooms: values.rooms,
-        //   bathrooms: values.bathrooms,
-        //   flatUser: user.email || '', // Set the flatUser to the logged-in user's email
-        //   flatImage: imageUrl,
-        // };
+        const flatData: Partial<Flat> = {
+          city: values.city,
+          areaSize: values.areaSize,
+          dateAvailable: values.dateAvailable,
+          hasAc: values.hasAc,
+          rentPrice: values.price,
+          streetName: values.streetName,
+          streetNumber: values.streetNumber,
+          yearBuilt: values.yearBuilt,
+          rooms: values.rooms,
+          bathrooms: values.bathrooms,
+          flatImage: imageUrl,
+        };
 
         if (isEditing && initialFlat?._id) {
           try {
-            //  await updateFlat({ ...flatData, flatId: initialFlat.flatId });
+            // await updateFlat({ ...flatData, flatId: initialFlat._id });
             if (onFormSubmit) {
               onFormSubmit(); // Close the dialog if the function is provided
               window.location.reload(); // Refresh the page when the dialog closes
@@ -138,28 +140,42 @@ const FlatForm: React.FC<FlatFormProps> = ({
           }
         } else {
           try {
-            //  const flatId = await createFlat(flatData);
-            //console.log('Flat created successfully with ID:', flatId);
-            console.log('Navigating to home...');
-            navigate('/home');
+            const flatId = await saveFlat(flatData);
+            toast.current?.show({
+              severity: 'success',
+              summary: 'Flat Created',
+              detail: `The flat ${flatId} has been successfully created`,
+              life: 3000,
+            });
+            setTimeout(() => {
+              navigate('/home'); // Navigate after a short delay
+            }, 2000); // Delay matches the toast's `life` duration
+            resetForm();
+            setFlatFile(null);
           } catch (error) {
-            console.error('Error creating flat:', error);
+            toast.current?.show({
+              severity: 'error',
+              summary: 'Error',
+              detail: `An error occurred while saving the flat ${error}`,
+              life: 3000,
+            });
           }
         }
-
-        resetForm();
-        //  setFlatFile(null);
       } catch (error) {
-        console.error('Error creating flat:', error);
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: `An error occurred while saving the flat ${error}`,
+          life: 3000,
+        });
       }
     },
   });
 
-  const handleUploadImage = async (e: FileUploadHandlerEvent) => {
-    console.log(e);
-    //  const file = e.files[0];
-    //  setFlatFile(file);
-  };
+  // const handleUploadImage = async (e: FileUploadHandlerEvent) => {
+  //   const file = e.files[0];
+  //   setFlatFile(file);
+  // };
 
   // const handleDateChange = (
   //   field: string,
@@ -171,6 +187,7 @@ const FlatForm: React.FC<FlatFormProps> = ({
   // };
   return (
     <>
+      <Toast ref={toast} position="top-center" />
       <form
         id="newFlatForm"
         className="w-full flex flex-column gap-5 "
@@ -338,28 +355,46 @@ const FlatForm: React.FC<FlatFormProps> = ({
             <FloatLabel>
               <IconField iconPosition="left">
                 <InputIcon className="pi pi-calendar text-500"> </InputIcon>
-                {/* <Calendar
+                <Calendar
                   id="dateAvailable"
                   value={formik.values.dateAvailable}
-                  onChange={(e) =>
-                    handleDateChange(
-                      'dateAvailable',
-                      e.value as Date | undefined,
-                    )
-                  }
+                  onChange={(e) => {
+                    const selectedRange = e.value as Date[] | null;
+                    if (
+                      Array.isArray(selectedRange) &&
+                      selectedRange.length === 2
+                    ) {
+                      formik.setFieldValue('dateAvailable', [
+                        selectedRange[0],
+                        selectedRange[1],
+                      ]);
+                    } else {
+                      formik.setFieldValue('dateAvailable', null);
+                    }
+                  }}
+                  selectionMode="range"
                   minDate={minDate}
                   maxDate={maxDate}
                   dateFormat="dd/mm/yy"
+                  placeholder="Select Date Range"
                   className="w-full"
-                /> */}
+                />
               </IconField>
               <label htmlFor="dateAvailable" className="left-3 text-400">
                 Date Available
               </label>
             </FloatLabel>
             <FormErrorMessage
-              touched={formik.touched.dateAvailable}
-              error={formik.errors.dateAvailable}
+              touched={
+                Array.isArray(formik.touched.dateAvailable)
+                  ? formik.touched.dateAvailable.some(Boolean) // Check if any date was touched
+                  : formik.touched.dateAvailable
+              }
+              error={
+                Array.isArray(formik.errors.dateAvailable)
+                  ? formik.errors.dateAvailable.filter(Boolean).join(', ') // Join multiple errors
+                  : formik.errors.dateAvailable
+              }
             />
           </div>
         </div>
@@ -400,16 +435,16 @@ const FlatForm: React.FC<FlatFormProps> = ({
         </div>
 
         {/* Image */}
-        {/* {initialFlat?.flatImage && (
+        {initialFlat?.flatImage && (
           <Image
             src={initialFlat?.flatImage}
             alt={initialFlat?.streetNumber + ' ' + initialFlat?.streetName}
             className="flat-img-form object-cover "
             width="150"
           />
-        )} */}
+        )}
 
-        <FileUpload
+        {/* <FileUpload
           name="demo[]"
           multiple={false}
           accept="image/*"
@@ -421,7 +456,7 @@ const FlatForm: React.FC<FlatFormProps> = ({
           customUpload
           auto
           uploadHandler={handleUploadImage}
-        />
+        /> */}
 
         {/* Button */}
         <Button
