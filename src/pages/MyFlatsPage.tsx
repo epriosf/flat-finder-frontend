@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FlatList from '../components/Flats/FlatList';
 import FlatTitle from '../components/Flats/FlatTitle';
 import { Flat } from '../components/Interfaces/FlatInterface';
@@ -10,6 +11,7 @@ const MyFlatsPage: React.FC = () => {
   const [filteredFlats, setFilteredFlats] = useState<Flat[]>([]); // State for filtered flats
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const { user } = useAuth();
+  const navigate = useNavigate(); // React Router navigate function
 
   useEffect(() => {
     if (user) {
@@ -70,13 +72,12 @@ const MyFlatsPage: React.FC = () => {
             You have not created any flats yet. Create a new flat to get
             started.
           </p>
-          <a
-            href="/home/new-flat"
-            rel="noopener noreferrer"
-            className="p-button font-bold no-underline"
+          <button
+            onClick={() => navigate('/home/new-flat')} // Use navigate for navigation
+            className="p-button font-bold"
           >
             Create New Flat
-          </a>
+          </button>
         </div>
       )}
     </div>

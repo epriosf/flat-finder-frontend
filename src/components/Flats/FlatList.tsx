@@ -10,8 +10,8 @@ import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 
 interface FlatListProps {
   flats: Flat[];
-  onFlatDeleted?: (flatId: string) => void; // Optional callback to handle post-deletion actions (e.g., updating state)
-  onFavoriteToggle?: (flatId: string, isFavorite: boolean) => void; // New callback prop
+  onFlatDeleted?: (flatId: string) => void;
+  onFavoriteToggle?: (flatId: string, isFavorite: boolean) => void;
 }
 const FlatList: React.FC<FlatListProps> = ({
   flats,
@@ -30,7 +30,7 @@ const FlatList: React.FC<FlatListProps> = ({
         try {
           // await deleteFlat(flatId);
           if (onFlatDeleted) {
-            onFlatDeleted(flatId); // Optionally trigger any additional actions after deletion
+            onFlatDeleted(flatId);
           }
         } catch (error) {
           console.error('Error deleting flat:', error);

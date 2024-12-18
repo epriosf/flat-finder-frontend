@@ -1,19 +1,19 @@
 import { useFormik } from 'formik';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
-//import { FileUploadHandlerEvent } from 'primereact/fileupload';
+import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
 import { FloatLabel } from 'primereact/floatlabel';
 import { IconField } from 'primereact/iconfield';
 import { Image } from 'primereact/image';
 import { InputIcon } from 'primereact/inputicon';
 import { InputSwitch, InputSwitchChangeEvent } from 'primereact/inputswitch';
 import { Message } from 'primereact/message';
+import { Toast } from 'primereact/toast';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useAuth } from '../../hooks/useAuth';
-//import { updateFlat } from '../../services/firebase';
-import { Toast } from 'primereact/toast';
+import { uploadFlatImage } from '../../services/firebase';
 import { saveFlat } from '../../services/flatsService';
 import GeneralInput from '../Commons/Inputs/GeneralInput';
 import FormErrorMessage from '../Commons/Inputs/MessageErrors';
@@ -31,8 +31,11 @@ maxDate.setFullYear(today.getFullYear() + 2);
 // Validation schema for the flat form
 const FlatSchema = Yup.object({
   areaSize: Yup.number().nullable().required('Area Size Required'),
+  name: Yup.string()
+    .min(3, 'Name must have at least 3 characters')
+    .required('Name Required'),
   city: Yup.string()
-    .min(2, 'City must have at least 2 characters')
+    .min(3, 'City must have at least 3 characters')
     .required('City Required'),
   dateAvailable: Yup.array()
     .of(Yup.date().required('Each date is required'))
@@ -41,7 +44,7 @@ const FlatSchema = Yup.object({
   hasAc: Yup.boolean().required('AC Requirement Required'),
   price: Yup.number().nullable().required('Price Required'),
   streetName: Yup.string()
-    .min(2, 'Street Name must have at least 2 characters')
+    .min(3, 'Street Name must have at least 3 characters')
     .required('Street Name Required'),
   streetNumber: Yup.number().nullable().required('Street Number Required'),
   yearBuilt: Yup.number()
@@ -49,7 +52,10 @@ const FlatSchema = Yup.object({
     .min(1900, 'Year Built must be after 1900')
     .max(currentYear, `Year Built cannot be later than ${currentYear}`)
     .required('Year Built is required'),
-  rooms: Yup.number().nullable().required('Rooms Required'),
+  rooms: Yup.number()
+    .integer('Rooms must be a whole number')
+    .nullable()
+    .required('Rooms Required'),
   bathrooms: Yup.number().nullable().required('Bathrooms Required'),
 });
 
@@ -65,18 +71,21 @@ const FlatForm: React.FC<FlatFormProps> = ({
   onFormSubmit,
 }) => {
   const [flatFile, setFlatFile] = useState<File | null>(null);
-  const navigate = useNavigate();
-  const { user } = useAuth();
   const toast = useRef<Toast>(null);
-
+  const { user: loggedUser } = useAuth();
+  const navigate = useNavigate(); // React Router navigate function
   useEffect(() => {
-    if (!user) {
-      navigate('/');
+    if (loggedUser === null) {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        navigate('/login'); // Navigate to login if no token exists
+      }
     }
-  }, [user, navigate]);
+  }, [loggedUser, navigate]);
 
   const formik = useFormik({
     initialValues: {
+      name: initialFlat?.name || '',
       areaSize: initialFlat?.areaSize || (null as number | null),
       city: initialFlat?.city || '',
       dateAvailable:
@@ -94,7 +103,7 @@ const FlatForm: React.FC<FlatFormProps> = ({
     },
     validationSchema: FlatSchema,
     onSubmit: async (values, { resetForm }) => {
-      if (!user?._id) {
+      if (!loggedUser?._id) {
         toast.current?.show({
           severity: 'error',
           summary: 'Error',
@@ -110,10 +119,11 @@ const FlatForm: React.FC<FlatFormProps> = ({
 
       try {
         if (flatFile) {
-          // imageUrl = await uploadFlatImage(flatFile);
+          imageUrl = await uploadFlatImage(flatFile);
         }
 
         const flatData: Partial<Flat> = {
+          name: values.name,
           city: values.city,
           areaSize: values.areaSize,
           dateAvailable: values.dateAvailable,
@@ -134,7 +144,7 @@ const FlatForm: React.FC<FlatFormProps> = ({
               onFormSubmit(); // Close the dialog if the function is provided
               window.location.reload(); // Refresh the page when the dialog closes
             }
-            // navigate('/home');
+            navigate('/home');
           } catch (error) {
             console.error('Error updating flat:', error);
           }
@@ -172,10 +182,10 @@ const FlatForm: React.FC<FlatFormProps> = ({
     },
   });
 
-  // const handleUploadImage = async (e: FileUploadHandlerEvent) => {
-  //   const file = e.files[0];
-  //   setFlatFile(file);
-  // };
+  const handleUploadImage = async (e: FileUploadHandlerEvent) => {
+    const file = e.files[0];
+    setFlatFile(file);
+  };
 
   // const handleDateChange = (
   //   field: string,
@@ -202,6 +212,22 @@ const FlatForm: React.FC<FlatFormProps> = ({
             id="error-message"
           />
         )}
+        {/* Name*/}
+        <div className="flex gap-3 w-full flex-column md:flex-row">
+          <GeneralInput
+            id="name"
+            name="name"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            iconClass="pi pi-home text-500"
+            label="Name"
+            type="text" // Specify the type if it's expected to be text
+          />
+          <FormErrorMessage
+            touched={formik.touched.name}
+            error={formik.errors.name}
+          />
+        </div>
         {/* Street Name and Street Number */}
         <div className="flex gap-3 w-full flex-column md:flex-row">
           {/* Street Number */}
@@ -444,7 +470,7 @@ const FlatForm: React.FC<FlatFormProps> = ({
           />
         )}
 
-        {/* <FileUpload
+        <FileUpload
           name="demo[]"
           multiple={false}
           accept="image/*"
@@ -456,7 +482,7 @@ const FlatForm: React.FC<FlatFormProps> = ({
           customUpload
           auto
           uploadHandler={handleUploadImage}
-        /> */}
+        />
 
         {/* Button */}
         <Button
