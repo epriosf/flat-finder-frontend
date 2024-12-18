@@ -2,8 +2,7 @@
 let authToken: string | null = null; // Store the token in memory
 
 const AUTH_URL =
-  import.meta.env.REACT_APP_BACKEND_URL ||
-  'https://flat-finder-backend.vercel.app';
+  import.meta.env.VITE_REACT_APP_BACKEND_URL || 'http://localhost:3000';
 export const loginUser = async (
   email: string,
   password: string,

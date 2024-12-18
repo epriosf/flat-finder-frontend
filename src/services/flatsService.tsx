@@ -2,7 +2,7 @@ import { Flat, Pagination } from '../components/Interfaces/FlatInterface';
 import { FlatsResponse } from '../components/Interfaces/UserInterface';
 
 const API_URL =
-  import.meta.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
+  import.meta.env.VITE_REACT_APP_BACKEND_URL || 'http://localhost:3000';
 
 const getFlats = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
