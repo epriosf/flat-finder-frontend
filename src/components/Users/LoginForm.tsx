@@ -1,7 +1,8 @@
 import { useFormik } from 'formik';
 import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
-import { useState } from 'react';
+import { Toast } from 'primereact/toast';
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useAuth } from '../../hooks/useAuth';
@@ -20,7 +21,7 @@ export interface UserLogin {
 const LoginForm = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [loginError, setLoginError] = useState<boolean>(false);
+  const toast = useRef<Toast>(null); // Ref for Toast
 
   const formik = useFormik({
     initialValues: {
@@ -33,31 +34,38 @@ const LoginForm = () => {
       try {
         const user = await login(formik.values.email, formik.values.password);
         if (user) {
-          navigate('/home');
-          console.log('Logged in user:', JSON.stringify(user));
-          setLoginError(false);
+          toast.current?.show({
+            severity: 'success',
+            summary: 'Login Successful',
+            detail: 'Welcome back!',
+            life: 3000, // Toast will stay for 3 seconds
+          });
+          setTimeout(() => {
+            navigate('/home'); // Navigate after a short delay
+          }, 2000); // Delay matches the toast's `life` duration
         } else {
-          console.error('Error logging in user:', user);
-          setLoginError(true);
+          toast.current?.show({
+            severity: 'error',
+            summary: 'Login Failed',
+            detail: 'Incorrect email or password.',
+            life: 3000,
+          });
         }
       } catch (error) {
-        console.error('Error logging in user:', error);
-        setLoginError(true);
+        toast.current?.show({
+          severity: 'error',
+          summary: 'Login Failed',
+          detail: `An unexpected error occurred ${error}`,
+          life: 3000,
+        });
       }
     },
   });
 
   return (
     <>
+      <Toast ref={toast} />
       <form id="loginForm" className="w-full" onSubmit={formik.handleSubmit}>
-        {/* Display general error message after submission if login fails */}
-        {loginError && (
-          <Message
-            severity="error"
-            text="Incorrect email or password."
-            className="mb-5 w-full justify-content-start text-pink-300 bg-indigo-800"
-          />
-        )}
         {/* Email */}
         <GeneralInput
           id="email"

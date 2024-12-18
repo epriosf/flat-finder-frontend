@@ -92,7 +92,7 @@ const getFlatById = async (flatId: string): Promise<Flat> => {
     throw error;
   }
 };
-export const getUserFlats = async (
+const getUserFlats = async (
   params: {
     page?: number;
     limit?: number;
@@ -135,4 +135,33 @@ export const getUserFlats = async (
   }
 };
 
-export { getFlatById, getFlats, getFlatsByIds };
+const saveFlat = async (flatData: Partial<Flat>): Promise<Flat> => {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) {
+      throw new Error('User is not authenticated');
+    }
+
+    const response = await fetch(`${API_URL}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authToken}`, // Include the token
+      },
+      body: JSON.stringify(flatData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Error saving flat');
+    }
+
+    const { data } = await response.json();
+    return data as Flat; // Return the saved flat
+  } catch (error) {
+    console.error('Error saving flat:', error);
+    throw error; // Re-throw the error to handle it in the component
+  }
+};
+
+export { getFlatById, getFlats, getFlatsByIds, getUserFlats, saveFlat };

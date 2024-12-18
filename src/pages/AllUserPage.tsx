@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FilterByUser from '../components/Commons/FilterBy/FilterByUser';
 import { SortByUser } from '../components/Commons/SortBy/SortByUser';
 import {
@@ -13,11 +14,14 @@ const AllUserPage = () => {
   const [users, setUsers] = useState<UserDetail[]>([]);
   const [originalUsers, setOriginalUsers] = useState<UserDetail[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // Loading state
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loggedUser) {
-      setLoading(false); // Stop loading if no user is logged in
-      return;
+    if (loggedUser === null) {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        navigate('/login'); // Navigate to login if no token exists
+      }
     }
 
     const fetchAllUsers = async () => {
