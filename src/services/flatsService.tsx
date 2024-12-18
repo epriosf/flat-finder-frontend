@@ -1,8 +1,8 @@
 import { Flat, Pagination } from '../components/Interfaces/FlatInterface';
 import { FlatsResponse } from '../components/Interfaces/UserInterface';
 
-// eslint-disable-next-line no-undef
-const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
+const API_URL =
+  import.meta.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
 
 const getFlats = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

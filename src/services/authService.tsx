@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 let authToken: string | null = null; // Store the token in memory
-// eslint-disable-next-line no-undef
-const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
+
+const AUTH_URL =
+  import.meta.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
 export const loginUser = async (
   email: string,
   password: string,
 ): Promise<any> => {
   try {
     // Send the login request
-    const loginResponse = await fetch(`${backendUrl}/auth/users/login`, {
+    const loginResponse = await fetch(`${AUTH_URL}/auth/users/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ export const fetchUserInfo = async (): Promise<any> => {
   }
 
   try {
-    const userResponse = await fetch(`${backendUrl}/auth/users/me`, {
+    const userResponse = await fetch(`${AUTH_URL}/auth/users/me`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${authToken}`, // Pass token in the header
