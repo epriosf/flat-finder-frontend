@@ -108,7 +108,10 @@ const FlatItem: React.FC<FlatItemProps> = ({
 
   // Header and footer for Card component
   const headerCard = (
-    <img alt={`${flat.streetNumber} ${flat.streetName}`} src={FlatImg} />
+    <img
+      alt={`${flat.streetNumber} ${flat.streetName}`}
+      src={flat.flatImage || FlatImg}
+    />
   );
 
   const footerCard = (
@@ -153,8 +156,10 @@ const FlatItem: React.FC<FlatItemProps> = ({
   return (
     <>
       <Card
-        title={`${flat.streetName} ${flat.streetNumber}`}
-        subTitle={flat.city}
+        title={`${flat.name}`}
+        subTitle={
+          <span className="capitalize">{`${flat.city} | ${flat.streetNumber} ${flat.streetName}`}</span>
+        }
         footer={footerCard}
         header={headerCard}
         onClick={handleCardClick}

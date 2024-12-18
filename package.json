@@ -16,7 +16,7 @@
   "dependencies": {
     "@types/styled-components": "^5.1.34",
     "date-fns": "^4.1.0",
-    "firebase": "^10.12.5",
+    "firebase": "^10.14.1",
     "formik": "^2.4.6",
     "javascript-time-ago": "^2.5.11",
     "primeflex": "^3.3.1",

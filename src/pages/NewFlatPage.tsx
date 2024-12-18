@@ -1,8 +1,21 @@
-import FlatForm from '../components/Flats/FlatForm';
-import NewFlatImg from './../images/new-flat-img.png';
 import { Image } from 'primereact/image';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import FlatForm from '../components/Flats/FlatForm';
+import { useAuth } from '../hooks/useAuth';
+import NewFlatImg from './../images/new-flat-img.png';
 
 const NewFlatPage = () => {
+  const { user: loggedUser } = useAuth();
+  const navigate = useNavigate(); // React Router navigate function
+  useEffect(() => {
+    if (loggedUser === null) {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        navigate('/login'); // Navigate to login if no token exists
+      }
+    }
+  }, [loggedUser, navigate]);
   return (
     <>
       <div className="w-full h-full flex gap-0">

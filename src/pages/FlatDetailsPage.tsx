@@ -49,8 +49,7 @@ const FlatDetailsPage: React.FC<FlatDetailsPageProps> = ({ flat }) => {
       <div>
         <img
           alt={`${flat.streetNumber} ${flat.streetName}`}
-          //  src={flat.flatImage || FlatImg}
-          src={FlatImg}
+          src={flat.flatImage || FlatImg}
           className="border-round-lg w-full"
         />
         <h2 className="text-primary  mb-0">${flat.rentPrice}</h2>
@@ -59,7 +58,7 @@ const FlatDetailsPage: React.FC<FlatDetailsPageProps> = ({ flat }) => {
         <div className="flex text-500 gap-2 text-sm mt-1">
           <i className="pi pi-map-marker"></i>
           <p className="m-0">
-            {flat.streetNumber} {flat.streetName} | {flat.city}
+            | {flat.name} | {flat.streetNumber} {flat.streetName}
           </p>
         </div>
 

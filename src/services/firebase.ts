@@ -16,16 +16,16 @@
 //   updateDoc,
 //   where,
 // } from 'firebase/firestore';
-// import {
-//   deleteObject,
-//   getDownloadURL,
-//   ref,
-//   uploadBytes,
-// } from 'firebase/storage';
+import {
+  //   deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from 'firebase/storage';
 // import { Flat } from '../components/Interfaces/FlatInterface';
 // import { NewMessage } from '../components/Interfaces/MessageInterface';
 // import { User, UserRegister } from '../components/Interfaces/UserInterface';
-// import { auth, db, storage } from '../config/firebase';
+import { storage } from '../config/firebase';
 
 // const collectionName = 'users';
 // const usersColletionRef = collection(db, collectionName);
@@ -140,18 +140,18 @@
 //   }
 // };
 
-// export const uploadFlatImage = async (file: File) => {
-//   try {
-//     const storageRefFlats = ref(storage, `flatImages/${file.name}`);
-//     await uploadBytes(storageRefFlats, file);
-//     const downloadURL = await getDownloadURL(storageRefFlats);
-//     console.log('Download URL:', downloadURL);
-//     return downloadURL;
-//   } catch (error) {
-//     console.error('Error uploading file:', error);
-//     throw error;
-//   }
-// };
+export const uploadFlatImage = async (file: File) => {
+  try {
+    const storageRefFlats = ref(storage, `flatImages/${file.name}`);
+    await uploadBytes(storageRefFlats, file);
+    const downloadURL = await getDownloadURL(storageRefFlats);
+    console.log('Download URL:', downloadURL);
+    return downloadURL;
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    throw error;
+  }
+};
 
 // export const getFlats = async (): Promise<Flat[]> => {
 //   const flatsSnapshot = await getDocs(flatsCollection);

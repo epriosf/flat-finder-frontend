@@ -1,6 +1,7 @@
 import { User } from './UserInterface';
 export interface Flat {
   _id: string;
+  name: string;
   city: string;
   streetName: string;
   streetNumber: number | null;
